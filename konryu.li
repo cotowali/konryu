@@ -1,0 +1,59 @@
+require 'os'
+
+var has_help_flag = false
+var is_error = false
+var self = ''
+var command = ''
+var args = []string{}
+for arg in os::args {
+  if self == '' {
+    self = arg // args[0]
+    continue
+  }
+
+  if arg == '-h' || arg == '--help' {
+    has_help_flag = true
+  } else if arg[0] == '-' {
+    eprintln("unknown option `$arg`")
+    is_error = true
+  } else if command == '' {
+    command = arg
+  } else {
+    args += [arg]
+  }
+}
+
+for arg in args {
+  println(arg)
+}
+
+var command_help = 'help'
+
+if command == '' {
+  has_help_flag = true
+} else if command == command_help {
+  has_help_flag = true
+} else {
+  eprintln("unknown command `$command`")
+  is_error = true
+}
+
+if has_help_flag || is_error {
+  var msg = 'Konryu - Cotowali installer and version manager
+
+Usage: kornyu [options] command
+
+Options:
+  -h --help - Print help message
+
+Commands:
+  help      - Print help message
+'
+  if is_error {
+    eprint(msg)
+    exit(1)
+  } else {
+    print(msg)
+    exit(0)
+  }
+}
