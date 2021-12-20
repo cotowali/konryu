@@ -51,7 +51,7 @@ fn cmd_install(args: []string) {
 
   var releases = get_releases()
   if version == 'latest' {
-    version = (releases |> head(1)) as string
+    version = releases |> first()
   } else {
     var found = false
     for release in releases {
