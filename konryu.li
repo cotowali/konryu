@@ -3,21 +3,6 @@ require 'os'
 require 'http'
 require 'tar'
 
-fn ...string |> json_field(key: string) |> ...string {
-  return filter("\"$key\"") |> replace('[", ]', '') |> replace("^$key:", '')
-}
-
-fn get_releases() |> ...string {
-  return http::get('https://api.github.com/repos/cotowali/cotowali/releases')
-    |> json_field('tag_name')
-}
-
-fn print_releases() {
-  for release in get_releases() {
-    println(release)
-  }
-}
-
 fn prepare_dir(path: string) {
   if os::path::is_file(path) {
     eprintln("Fatal error: Cannot create $path. File exists")
@@ -33,69 +18,28 @@ prepare_dir(konryu_path)
 var konryu_cache = os::path::join(konryu_path, '.cache')
 prepare_dir(konryu_cache)
 
-var has_help_flag = false
-var is_error = false
-var self = ''
-var command = ''
-var args = []string{}
-for arg in os::args {
-  if self == '' {
-    self = arg // args[0]
-    continue
-  }
 
-  if arg == '-h' || arg == '--help' {
-    has_help_flag = true
-  } else if arg[0] == '-' {
-    eprintln("unknown option `$arg`")
-    is_error = true
-  } else if command == '' {
-    command = arg
-  } else {
-    args += [arg]
+fn ...string |> json_field(key: string) |> ...string {
+  return filter("\"$key\"") |> replace('[", ]', '') |> replace("^$key:", '')
+}
+
+fn get_releases() |> ...string {
+  return http::get('https://api.github.com/repos/cotowali/cotowali/releases')
+    |> json_field('tag_name')
+}
+
+fn print_releases() {
+  for release in get_releases() {
+    println(release)
   }
 }
 
-var command_help = 'help'
-
-if !is_error {
-  if command == '' {
-    command = 'install'
-  } else if command == command_help {
-    has_help_flag = true
-  } else if command == 'install' {
-    // nothing
-  } else if command == 'releases' {
-    print_releases()
-    exit(0)
-  } else {
-    eprintln("unknown command `$command`")
-    is_error = true
-  }
+fn cmd_releases() {
+  print_releases()
+  exit(0)
 }
 
-if has_help_flag || is_error {
-  var msg = 'Konryu - Cotowali installer and version manager
-
-Usage: kornyu [options] [command] [version]
-
-Options:
-  -h --help - Print help message
-
-Commands:
-  help      - Print help message
-  releases  - List available cotowali releases
-'
-  if is_error {
-    eprint(msg)
-    exit(1)
-  } else {
-    print(msg)
-    exit(0)
-  }
-}
-
-if command == 'install' {
+fn cmd_install(args: []string) {
   var version = 'latest'
   if args.len() > 1 {
     eprintln('Too many arguments. Specify just one version')
@@ -131,3 +75,65 @@ if command == 'install' {
 
   exit(0)
 }
+
+var has_help_flag = false
+var is_error = false
+var self = ''
+var command = ''
+var args = []string{}
+for arg in os::args {
+  if self == '' {
+    self = arg // args[0]
+    continue
+  }
+
+  if arg == '-h' || arg == '--help' {
+    has_help_flag = true
+  } else if arg[0] == '-' {
+    eprintln("unknown option `$arg`")
+    is_error = true
+  } else if command == '' {
+    command = arg
+  } else {
+    args += [arg]
+  }
+}
+
+var command_help = 'help'
+
+if !is_error {
+  if command == '' {
+    command = 'install'
+  } else if command == command_help {
+    has_help_flag = true
+  } else if command == 'install' {
+    cmd_install(args)
+  } else if command == 'releases' {
+    cmd_releases()
+  } else {
+    eprintln("unknown command `$command`")
+    is_error = true
+  }
+}
+
+if has_help_flag || is_error {
+  var msg = 'Konryu - Cotowali installer and version manager
+
+Usage: kornyu [options] [command] [version]
+
+Options:
+  -h --help - Print help message
+
+Commands:
+  help      - Print help message
+  releases  - List available cotowali releases
+'
+  if is_error {
+    eprint(msg)
+    exit(1)
+  } else {
+    print(msg)
+    exit(0)
+  }
+}
+
