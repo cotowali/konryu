@@ -120,7 +120,7 @@ if command == 'install' {
       exit(1)
     }
   }
-  var dir = os::path::join(konryu_path, version)
+  var dir = os::path::join(konryu_path, 'versions', version)
   var url_base = 'https://github.com/cotowali/cotowali/releases/download'
   // https://github.com/cotowali/cotowali/blob/main/scripts/pack.li
   var filename = "cotowali_${platform::system()}_${platform::machine()}.tar.gz"
