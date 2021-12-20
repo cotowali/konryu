@@ -55,10 +55,6 @@ for arg in os::args {
   }
 }
 
-for arg in args {
-  println(arg)
-}
-
 var command_help = 'help'
 
 if !is_error {
