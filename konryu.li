@@ -1,3 +1,4 @@
+require 'cotowali'
 require 'platform'
 require 'os'
 require 'http'
@@ -66,8 +67,7 @@ fn cmd_install(args: []string) {
   }
   var dir = os::path::join(konryu_path, 'versions', version)
   var url_base = 'https://github.com/cotowali/cotowali/releases/download'
-  // https://github.com/cotowali/cotowali/blob/main/scripts/pack.li
-  var filename = "cotowali_${platform::system()}_${platform::machine()}.tar.gz"
+  var filename = cotowali::release::archive_name
 
   println("Downloading ${filename} ...")
   http::get("${url_base}/${version}/${filename}") |> tar::gz::extract_on(dir)
