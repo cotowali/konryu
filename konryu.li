@@ -19,6 +19,9 @@ prepare_dir(konryu_path)
 var konryu_cache = os::path::join(konryu_path, '.cache')
 prepare_dir(konryu_cache)
 var versions_path = os::path::join(konryu_path, 'versions')
+fn version_path(version: string): string {
+  return os::path::join(versions_path, version)
+}
 
 
 fn ...string |> json_field(key: string) |> ...string {
@@ -36,6 +39,11 @@ fn print_releases() {
   }
 }
 
+fn specified_too_many_versions() {
+  eprintln('Too many arguments. Specify just one version')
+  exit(1)
+}
+
 fn cmd_releases() {
   print_releases()
   exit(0)
@@ -44,8 +52,7 @@ fn cmd_releases() {
 fn cmd_install(args: []string) {
   var version = 'latest'
   if args.len() > 1 {
-    eprintln('Too many arguments. Specify just one version')
-    exit(1)
+    specified_too_many_versions()
   } else if args.len() > 0 {
     version = args[0]
   }
@@ -66,7 +73,7 @@ fn cmd_install(args: []string) {
       exit(1)
     }
   }
-  var dir = os::path::join(versions_path, version)
+  var dir = version_path(version)
   var url_base = 'https://github.com/cotowali/cotowali/releases/download'
   var filename = cotowali::release::archive_name
 
