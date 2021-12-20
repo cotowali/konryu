@@ -8,7 +8,7 @@ fn ...string |> json_field(key: string) |> ...string {
 
 fn get_releases() |> ...string {
   return http::get('https://api.github.com/repos/cotowali/cotowali/releases')
-  |> json_field('tag_name')
+    |> json_field('tag_name')
 }
 
 fn print_releases() {
@@ -16,6 +16,21 @@ fn print_releases() {
     println(release)
   }
 }
+
+fn prepare_dir(path: string) {
+  if os::path::is_file(path) {
+    eprintln("Fatal error: Cannot create $path. File exists")
+    exit(1)
+  }
+  if !os::path::exists(path) {
+    mkdir(path)
+  }
+}
+
+var konryu_path = os::path::join(os::path::home(), '.konryu')
+prepare_dir(konryu_path)
+var konryu_cache = os::path::join(konryu_path, '.cache')
+prepare_dir(konryu_cache)
 
 var has_help_flag = false
 var is_error = false
