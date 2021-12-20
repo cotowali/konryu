@@ -1,4 +1,21 @@
 require 'os'
+require 'http'
+require 'os'
+
+fn ...string |> json_field(key: string) |> ...string {
+  return filter("\"$key\"") |> replace('[", ]', '') |> replace("^$key:", '')
+}
+
+fn get_releases() |> ...string {
+  return http::get('https://api.github.com/repos/cotowali/cotowali/releases')
+  |> json_field('tag_name')
+}
+
+fn print_releases() {
+  for release in get_releases() {
+    println(release)
+  }
+}
 
 var has_help_flag = false
 var is_error = false
@@ -29,13 +46,18 @@ for arg in args {
 
 var command_help = 'help'
 
-if command == '' {
-  has_help_flag = true
-} else if command == command_help {
-  has_help_flag = true
-} else {
-  eprintln("unknown command `$command`")
-  is_error = true
+if !is_error {
+  if command == '' {
+    has_help_flag = true
+  } else if command == command_help {
+    has_help_flag = true
+  } else if command == 'releases' {
+    print_releases()
+    exit(0)
+  } else {
+    eprintln("unknown command `$command`")
+    is_error = true
+  }
 }
 
 if has_help_flag || is_error {
@@ -48,6 +70,7 @@ Options:
 
 Commands:
   help      - Print help message
+  releases  - List available cotowali releases
 '
   if is_error {
     eprint(msg)
