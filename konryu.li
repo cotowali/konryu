@@ -18,6 +18,7 @@ var konryu_path = os::path::join(os::path::home(), '.konryu')
 prepare_dir(konryu_path)
 var konryu_cache = os::path::join(konryu_path, '.cache')
 prepare_dir(konryu_cache)
+var versions_path = os::path::join(konryu_path, 'versions')
 
 
 fn ...string |> json_field(key: string) |> ...string {
@@ -65,7 +66,7 @@ fn cmd_install(args: []string) {
       exit(1)
     }
   }
-  var dir = os::path::join(konryu_path, 'versions', version)
+  var dir = os::path::join(versions_path, version)
   var url_base = 'https://github.com/cotowali/cotowali/releases/download'
   var filename = cotowali::release::archive_name
 
@@ -73,6 +74,19 @@ fn cmd_install(args: []string) {
   http::get("${url_base}/${version}/${filename}") |> tar::gz::extract_on(dir)
   println("Successfully installed cotowali ${version} on ${dir}")
 
+  exit(0)
+}
+
+fn get_installed_versions() |> ...string {
+  for path in ls(versions_path) {
+    yield path
+  }
+}
+
+fn cmd_versions() {
+  for path in get_installed_versions() {
+    println(path)
+  }
   exit(0)
 }
 
@@ -110,6 +124,8 @@ if !is_error {
     cmd_install(args)
   } else if command == 'releases' {
     cmd_releases()
+  } else if command == 'versions' {
+    cmd_versions()
   } else {
     eprintln("unknown command `$command`")
     is_error = true
@@ -127,6 +143,7 @@ Options:
 Commands:
   help      - Print help message
   releases  - List available cotowali releases
+  versions  - List installed cotowali versions
 '
   if is_error {
     eprint(msg)
