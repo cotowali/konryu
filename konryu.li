@@ -265,6 +265,9 @@ Options:
 
 Commands:
   help      - Print help message
+  install   - Install cotowali release
+  uninstall - uninstall specified version
+  use       - use specified version
   releases  - List available cotowali releases
   versions  - List installed cotowali versions
 '
