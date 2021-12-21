@@ -57,6 +57,13 @@ fn is_installed_version(target_version: string): bool {
   return false
 }
 
+fn current_version(): string {
+  if !os::path::is_file(current_version_file_path) {
+    return ''
+  }
+  return cat(current_version_file_path) |> first()
+}
+
 fn switch_version(version: string) {
   if os::path::exists(cotowali_path) {
     rm_r(cotowali_path)
@@ -69,6 +76,16 @@ fn switch_version(version: string) {
 
 fn cmd_releases() {
   print_releases()
+  exit(0)
+}
+
+fn cmd_current() {
+  const version = current_version()
+  if version != '' {
+    println(version)
+  } else {
+    println('cotowali is not enabled')
+  }
   exit(0)
 }
 
@@ -203,6 +220,8 @@ if !is_error {
     cmd_use(args)
   } else if command == 'releases' {
     cmd_releases()
+  } else if command == 'current' {
+    cmd_current()
   } else if command == 'versions' {
     cmd_versions()
   } else {
