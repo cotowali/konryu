@@ -57,6 +57,16 @@ fn is_installed_version(target_version: string): bool {
   return false
 }
 
+fn switch_version(version: string) {
+  if os::path::exists(cotowali_path) {
+    rm_r(cotowali_path)
+  }
+  os::symlink(os::path::join(version_path(version), 'cotowali'), cotowali_path)
+  version |> current_version_file_path
+
+  println("switched to cotowali $version")
+}
+
 fn cmd_releases() {
   print_releases()
   exit(0)
@@ -151,13 +161,7 @@ fn cmd_use(args: []string) {
     exit(1)
   }
 
-  if os::path::exists(cotowali_path) {
-    rm_r(cotowali_path)
-  }
-  os::symlink(os::path::join(version_path(target_version), 'cotowali'), cotowali_path)
-  target_version |> current_version_file_path
-
-  println("switched to cotowali ${target_version}")
+  switch_version(target_version)
   exit(0)
 }
 
