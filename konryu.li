@@ -166,6 +166,8 @@ fn cmd_install_konryu() {
   println('')
   println("Add `$konryu_bin_dir` to your PATH to use konryu command")
   println("export PATH=\"$konryu_bin_dir:\${PATH}\"")
+  println('')
+  println('Then write `eval "$(konryu init)"` in your shell config like .bashrc to configure environment')
 }
 
 fn cmd_update_konryu() {
