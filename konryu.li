@@ -151,6 +151,7 @@ fn confirm_default_no(message: string): bool {
 fn download_konryu_sh() {
   println("Downloading konryu ...")
   http::get(konryu_sh_url) |> konryu_sh
+  @chmod('+x', konryu_sh)
 }
 
 fn cmd_install_konryu() {
