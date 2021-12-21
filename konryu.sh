@@ -1,0 +1,1523 @@
+#!/bin/sh
+
+
+# -- start builtin --
+#
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+
+cotowali_true_value() {
+	echo 'true'
+}
+
+cotowali_false_value() {
+	echo 'false'
+}
+
+
+array_to_str() {
+  name=$1
+  echo "$( eval echo $(array_elements $name) )"
+}
+
+array_get() {
+  name=$1
+  i=$2
+  eval echo "\$${name}_$i"
+}
+
+array_set() {
+  name=$1
+  i=$2
+  val=$3
+  eval "${name}_$i='$val'"
+}
+
+array_push() {
+	name=$1
+	value=$2
+
+	array_set $name $(( ${name}_len )) "$value"
+  eval "${name}_len=$(( ${name}_len + 1 ))"
+}
+
+array_push_array() {
+  name="$1"
+  values_name="$2"
+	values_len=$(( ${values_name}_len ))
+
+  push_array_i=0
+  while [ "$push_array_i" -lt "$values_len" ]
+  do
+		array_push "$name" "$(array_get $values_name $push_array_i)"
+    push_array_i=$((push_array_i + 1))
+  done
+}
+
+array_len() {
+  name="$1"
+  eval "echo \$${name}_len"
+}
+
+array_elements() {
+  name=$1
+  len="$(array_len $name)"
+
+  i=0
+  while [ "$i" -lt "$len" ]
+  do
+    elem="${name}_$i"
+    printf '"$%s"' "$elem"
+    if [ "$i" -ne "$(( len - 1 ))" ]
+    then
+      printf ' '
+    fi
+    i=$((i + 1))
+  done
+}
+
+array_assign() {
+  name=$1
+  shift
+  len="$#"
+  eval "${name}_len=$len"
+
+  i=0
+  while [ "$i" -lt "$len" ]
+  do
+    array_set "$name" "$i" "$(eval echo "\$$(( i + 1 ))")"
+    i=$((i + 1))
+  done
+}
+
+array_init() {
+  name=$1
+  len=$2
+  value=$3
+
+  eval "${name}_len=$len"
+  i=0
+  while [ "$i" -lt "$len" ]
+  do
+    array_set "$name" "$i" "$value"
+    i=$((i + 1))
+  done
+}
+
+array_copy() {
+  dest_name="$1"
+  src_name="$2"
+  len="$(array_len $src_name)"
+  eval "${dest_name}_len=$len"
+
+  i=0
+  while [ "$i" -lt "$len" ]
+  do
+    array_set "$dest_name" "$i" "$(array_get "$src_name" $i)"
+    i=$((i + 1))
+  done
+}
+
+map_keys_var() {
+  echo "__cotowali_meta_map_keys_$1"
+}
+
+map_keys() {
+  eval echo "\$$(map_keys_var $1)"
+}
+
+map_entries() {
+  name="$1"
+  for key in $(map_keys $name)
+  do
+    printf
+  done
+}
+
+map_copy() {
+  dst="$1"
+  src="$2"
+  for key in $(map_keys "$src")
+  do
+    value="$(map_get "$src" "$key")"
+    map_set "$dst" "$key" "$value"
+  done
+}
+
+map_get() {
+  name=$1
+  key=$2
+  eval echo "\$${name}_$key"
+}
+
+map_set() {
+  name=$1
+  key=$2
+  value=$3
+  eval "${name}_$key=$value"
+  eval "$(map_keys_var $name)=\"$({ map_keys $name; echo $key; } | sort | uniq )\""
+}
+
+# -- end builtin --
+
+# file: konryu.li
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/builtin.li
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+print() {
+  print_s="$1"
+   printf '%s' "$print_s" 
+}
+println() {
+  println_s="$1"
+   printf '%s\n' "$println_s" 
+}
+eprint() {
+  eprint_s="$1"
+   printf '%s' "$eprint_s" >&2 
+}
+eprintln() {
+  eprintln_s="$1"
+   printf '%s\n' "$eprintln_s" >&2 
+}
+isatty() {
+  isatty_fd="$1"
+  isatty_true_='true'
+  isatty_res='false'
+  
+    if [ -t $isatty_fd ]
+    then
+      isatty_res=$isatty_true_
+    fi
+  
+  echo "${isatty_res}"
+  return 0
+}
+_cotowali_tmp_0='/dev/tty'
+
+tty="$_cotowali_tmp_0"
+input() {
+  input_prompt="$1"
+  if "$(isatty 0)" && [ "${input_prompt}"  !=  '' ]
+  then
+    print "${input_prompt}" > "${tty}"
+  fi
+  input_res=
+  
+    read -r input_res
+  
+  echo "${input_res}"
+  return 0
+}
+input_tty() {
+  input_tty_prompt="$1"
+  if [ "${input_tty_prompt}"  !=  '' ]
+  then
+    print "${input_tty_prompt}" > "${tty}"
+  fi
+  input_tty_res=
+  
+    read -r input_tty_res < $tty
+  
+  echo "${input_tty_res}"
+  return 0
+}
+head5124332187720725466() {
+  head_n="$1"
+   head -n $head_n 
+}
+first16391136280022780767() {
+   head -n 1 
+}
+tail10344789879980115664() {
+  tail_n="$1"
+   tail -n $tail_n 
+}
+last7270523292488342172() {
+   tail -n 1 
+}
+count() {
+   wc -l 
+}
+sequence() {
+  array_assign "_cotowali_tmp_1" "$@"
+  array_copy "sequence_elements" "_cotowali_tmp_1"
+  for _cotowali_tmp_2 in $(array_elements sequence_elements)
+  do
+    sequence_for_2_elem="$(eval echo $_cotowali_tmp_2)"
+    echo "${sequence_for_2_elem}"
+  done
+}
+join() {
+  join_sep="$1"
+  join_ret=''
+  set -- 0 
+  join_i="$1"
+  join_s="$2"
+  while read join_s
+  do
+    if [ "${join_i}" -gt 0 ]
+    then
+      join_ret="${join_ret}""${join_sep}"
+    fi
+    join_ret="${join_ret}""${join_s}"
+    join_i=$(( join_i += 1 ))
+  done
+  echo "${join_ret}"
+  return 0
+}
+range() {
+  range_begin="$1"
+  shift
+  range_end="$1"
+  for _cotowali_tmp_3 in $(seq $(( range_end - range_begin )))
+  do
+    range_for_5_i="$(eval echo $_cotowali_tmp_3)"
+    echo $((  (range_for_5_i ) + range_begin - 1 ))
+  done
+}
+
+# info: fn exit(code)
+
+
+# info: fn cat(files)
+
+
+# info: fn seq(n)
+
+
+# info: fn basename(path)
+
+
+# info: fn cd(path)
+
+
+# info: fn dirname(path)
+
+
+# info: fn cp(args)
+
+cp_r() {
+  array_assign "_cotowali_tmp_4" "$@"
+  array_copy "cp_r_args" "_cotowali_tmp_4"
+  
+    cp -r "$@"
+  
+}
+
+# info: fn mkdir(args)
+
+mkdir_p() {
+  array_assign "_cotowali_tmp_5" "$@"
+  array_copy "mkdir_p_args" "_cotowali_tmp_5"
+  
+    mkdir -p "$@"
+  
+}
+pwd775046991074756466() {
+   pwd 
+}
+
+# info: fn ls(files)
+
+
+# info: fn rm(paths)
+
+rm_r() {
+  array_assign "_cotowali_tmp_6" "$@"
+  array_copy "rm_r_paths" "_cotowali_tmp_6"
+   rm -r "$@" 
+}
+
+# info: fn touch(files)
+
+which4581728952241211296() {
+  which_name="$1"
+  which_res=
+  
+    which_res=$(which $which_name)
+    if [ $? -ne 0 ]
+    then
+      which_res=''
+    fi
+  
+  echo "${which_res}"
+  return 0
+}
+filter() {
+  filter_pat="$1"
+   grep '-E' "$filter_pat" 
+}
+replace() {
+  replace_old="$1"
+  shift
+  replace_new="$1"
+  _cotowali_tmp_7='s/\\/\\\\/g'
+
+  replace_pattern="$(echo "${replace_old}" | sed "$_cotowali_tmp_7" )"
+  
+    awk -v old="$replace_pattern" -v "new=$replace_new" '{gsub(old, new); print $0}'
+  
+}
+string__replace() {
+  string__replace_s="$1"
+  shift
+  string__replace_old="$1"
+  shift
+  string__replace_new="$1"
+  _cotowali_tmp_8='s/\\/\\\\/g'
+
+  string__replace_pattern="$(echo "${string__replace_old}" | sed "$_cotowali_tmp_8" )"
+  _cotowali_tmp_15='{gsub(old, new); print $0}'
+
+  _cotowali_tmp_14="new=${string__replace_new}"
+
+  _cotowali_tmp_13='-v'
+
+  _cotowali_tmp_12="old=${string__replace_pattern}"
+
+  _cotowali_tmp_11='-v'
+
+  _cotowali_tmp_10='RS=""'
+
+  _cotowali_tmp_9='-v'
+
+  print "${string__replace_s}" | awk "$_cotowali_tmp_9" "$_cotowali_tmp_10" "$_cotowali_tmp_11" "$_cotowali_tmp_12" "$_cotowali_tmp_13" "$_cotowali_tmp_14" "$_cotowali_tmp_15"
+  return 0
+}
+string__substr() {
+  string__substr_s="$1"
+  shift
+  string__substr_i="$1"
+  shift
+  string__substr_n="$1"
+  if [ "${string__substr_n}" -le 0 ]
+  then
+    echo ''
+    return 0
+  fi
+  _cotowali_tmp_22='{print substr($0, m, n)}'
+
+  _cotowali_tmp_21="n=${string__substr_n}"
+
+  _cotowali_tmp_20='-v'
+
+  _cotowali_tmp_19="m=$(( string__substr_i + 1 ))"
+
+  _cotowali_tmp_18='-v'
+
+  _cotowali_tmp_17='RS=""'
+
+  _cotowali_tmp_16='-v'
+
+  echo "$(echo "${string__substr_s}" | awk "$_cotowali_tmp_16" "$_cotowali_tmp_17" "$_cotowali_tmp_18" "$_cotowali_tmp_19" "$_cotowali_tmp_20" "$_cotowali_tmp_21" "$_cotowali_tmp_22" )"
+  return 0
+}
+string__index() {
+  string__index_s="$1"
+  shift
+  string__index_t="$1"
+  if [ "$(string__len "${string__index_t}")" -eq 0 ]
+  then
+    echo 0
+    return 0
+  fi
+  _cotowali_tmp_27='{print index($0, t) - 1}'
+
+  _cotowali_tmp_26="t=${string__index_t}"
+
+  _cotowali_tmp_25='-v'
+
+  _cotowali_tmp_24='RS=""'
+
+  _cotowali_tmp_23='-v'
+
+  echo "$(echo "${string__index_s}" | awk "$_cotowali_tmp_23" "$_cotowali_tmp_24" "$_cotowali_tmp_25" "$_cotowali_tmp_26" "$_cotowali_tmp_27" )"
+
+  return 0
+}
+string__last_index() {
+  string__last_index_s="$1"
+  shift
+  string__last_index_t="$1"
+  string__last_index_s_len="$(string__len "${string__last_index_s}")"
+  if [ "$(string__len "${string__last_index_t}")" -eq 0 ]
+  then
+    echo "${string__last_index_s_len}"
+    return 0
+  fi
+  string__last_index_last_i=$(( -1 * 1 ))
+  string__last_index_rest="${string__last_index_s}"
+  while 'true'
+  do
+    string__last_index_while_9_i="$(string__index "${string__last_index_rest}" "${string__last_index_t}")"
+    if [ "${string__last_index_while_9_i}" -lt 0 ]
+    then
+      break
+    fi
+    string__last_index_last_i=$(( string__last_index_while_9_i +  (string__last_index_s_len - $(string__len "${string__last_index_rest}") ) ))
+    string__last_index_rest="$(string__substr "${string__last_index_rest}" $(( string__last_index_while_9_i + $(string__len "${string__last_index_t}") )) "$(string__len "${string__last_index_rest}")")"
+  done
+  echo "${string__last_index_last_i}"
+  return 0
+}
+string__len() {
+  string__len_s="$1"
+  string__len_n=0
+   string__len_n=${#string__len_s} 
+  echo "${string__len_n}"
+  return 0
+}
+lines() {
+  read _cotowali_tmp_28
+  lines_s="$_cotowali_tmp_28"
+  echo "${lines_s}" | cat
+  return 0
+}
+string__lines() {
+  string__lines_s="$1"
+  echo "${string__lines_s}" | lines
+  return 0
+}
+string__starts_with() {
+  string__starts_with_s="$1"
+  shift
+  string__starts_with_ss="$1"
+  if [ "$(string__len "${string__starts_with_ss}")" -eq 0 ]
+  then
+    echo 'true'
+    return 0
+  fi
+  if [ "$(string__len "${string__starts_with_ss}")" -gt "$(string__len "${string__starts_with_s}")" ]
+  then
+    echo 'false'
+    return 0
+  fi
+  if [ "${string__starts_with_ss}"  =  "${string__starts_with_s}" ]
+  then
+    echo 'true'
+    return 0
+  fi
+  echo "$( [ "$(string__index "${string__starts_with_s}" "${string__starts_with_ss}")" -eq 0 ] && echo 'true' || echo 'false' )"
+  return 0
+}
+string__ends_with() {
+  string__ends_with_s="$1"
+  shift
+  string__ends_with_ss="$1"
+  if [ "$(string__len "${string__ends_with_ss}")" -eq 0 ]
+  then
+    echo 'true'
+    return 0
+  fi
+  if [ "$(string__len "${string__ends_with_ss}")" -gt "$(string__len "${string__ends_with_s}")" ]
+  then
+    echo 'false'
+    return 0
+  fi
+  if [ "${string__ends_with_ss}"  =  "${string__ends_with_s}" ]
+  then
+    echo 'true'
+    return 0
+  fi
+  echo "$( [ "$(string__last_index "${string__ends_with_s}" "${string__ends_with_ss}")" -eq $(( $(string__len "${string__ends_with_s}") - $(string__len "${string__ends_with_ss}") )) ] && echo 'true' || echo 'false' )"
+  return 0
+}
+string__trim_prefix() {
+  string__trim_prefix_s="$1"
+  shift
+  string__trim_prefix_prefix="$1"
+  if ! { "$(string__starts_with "${string__trim_prefix_s}" "${string__trim_prefix_prefix}")" ; }
+  then
+    echo "${string__trim_prefix_s}"
+    return 0
+  fi
+  string__substr "${string__trim_prefix_s}" "$(string__len "${string__trim_prefix_prefix}")" "$(string__len "${string__trim_prefix_s}")"
+  return 0
+}
+string__trim_suffix() {
+  string__trim_suffix_s="$1"
+  shift
+  string__trim_suffix_suffix="$1"
+  if ! { "$(string__ends_with "${string__trim_suffix_s}" "${string__trim_suffix_suffix}")" ; }
+  then
+    echo "${string__trim_suffix_s}"
+    return 0
+  fi
+  string__substr "${string__trim_suffix_s}" 0 $(( $(string__len "${string__trim_suffix_s}") - $(string__len "${string__trim_suffix_suffix}") ))
+  return 0
+}
+string__trim_start() {
+  string__trim_start_s="$1"
+  _cotowali_tmp_29='s/^[[:space:]]*//'
+
+  echo "${string__trim_start_s}" | sed "$_cotowali_tmp_29"
+  return 0
+}
+string__trim_end() {
+  string__trim_end_s="$1"
+  _cotowali_tmp_30='s/[[:space:]]*$//'
+
+  echo "${string__trim_end_s}" | sed "$_cotowali_tmp_30"
+  return 0
+}
+string__trim() {
+  string__trim_s="$1"
+  string__trim_end "$(string__trim_start "${string__trim_s}")"
+  return 0
+}
+string__contains() {
+  string__contains_s="$1"
+  shift
+  string__contains_substr="$1"
+  echo "$( [ "$(string__index "${string__contains_s}" "${string__contains_substr}")" -ge 0 ] && echo 'true' || echo 'false' )"
+  return 0
+}
+__array__any__len() {
+  array_copy "__array__any__len_arr" "$1"
+  __array__any__len_n=0
+   __array__any__len_n=$(array_len __array__any__len_arr) 
+  echo "${__array__any__len_n}"
+  return 0
+}
+__array__string__join() {
+  array_copy "__array__string__join_ss" "$1"
+  shift
+  __array__string__join_sep="$1"
+  if [ "$(__array__any__len __array__string__join_ss)" -eq 0 ]
+  then
+    echo ''
+    return 0
+  fi
+  __array__string__join_ret=
+  for _cotowali_tmp_31 in $(range 0 "$(__array__any__len __array__string__join_ss)")
+  do
+    __array__string__join_for_20_i="$(eval echo $_cotowali_tmp_31)"
+    if [ "${__array__string__join_for_20_i}" -gt 0 ]
+    then
+      __array__string__join_ret="${__array__string__join_ret}""${__array__string__join_sep}"
+    fi
+    __array__string__join_ret="${__array__string__join_ret}""$(array_get __array__string__join_ss "${__array__string__join_for_20_i}" )"
+  done
+  echo "${__array__string__join_ret}"
+  return 0
+}
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/cotowali.li
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/platform.li
+# platform.li
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+platform_has_command() {
+  platform_has_command_command="$1"
+  platform_has_command_code=0
+  
+      type $platform_has_command_command > /dev/null 2>&1
+        platform_has_command_code=$?
+    
+  echo "$( [ "${platform_has_command_code}" -eq 0 ] && echo 'true' || echo 'false' )"
+  return 0
+}
+platform_require_command() {
+  platform_require_command_command="$1"
+  if "$(platform_has_command "${platform_require_command_command}")"
+  then
+
+    return 0
+  fi
+  platform_required_command_not_found "${platform_require_command_command}"
+}
+platform_required_command_not_found() {
+  platform_required_command_not_found_command="$1"
+  _cotowali_tmp_32="${platform_required_command_not_found_command}: command not found"
+
+  eprintln "$_cotowali_tmp_32"
+  exit 127
+}
+platform_uname() {
+   uname -a 
+}
+platform_system() {
+  platform_system_res=''
+   platform_system_res="$(uname -s)" 
+  echo "${platform_system_res}"
+  return 0
+}
+platform_machine() {
+   uname -m 
+}
+platform_is_windows() {
+  _cotowali_tmp_33='Windows'
+
+  echo "$( [ "$(platform_system)"  =  "$_cotowali_tmp_33" ] && echo 'true' || echo 'false' )"
+  return 0
+}
+platform_is_linux() {
+  _cotowali_tmp_34='Linux'
+
+  echo "$( [ "$(platform_system)"  =  "$_cotowali_tmp_34" ] && echo 'true' || echo 'false' )"
+  return 0
+}
+platform_is_darwin() {
+  _cotowali_tmp_35='Darwin'
+
+  echo "$( [ "$(platform_system)"  =  "$_cotowali_tmp_35" ] && echo 'true' || echo 'false' )"
+  return 0
+}
+platform_is_busybox() {
+  if [ $# -eq 0 ]
+  then
+    platform_is_busybox_name=''
+  else
+    platform_is_busybox_name="$1"
+  fi
+  if [ "${platform_is_busybox_name}"  =  '' ]
+  then
+    _cotowali_tmp_36='realpath'
+
+    platform_is_busybox_name="$_cotowali_tmp_36"
+  fi
+  if "$(platform_has_command "${platform_is_busybox_name}")"
+  then
+    platform_is_busybox_if_2_help_text=''
+     platform_is_busybox_if_2_help_text=$($platform_is_busybox_name 2>&1 | head -n 1) 
+    _cotowali_tmp_37='BusyBox'
+
+    string__contains "${platform_is_busybox_if_2_help_text}" "$_cotowali_tmp_37"
+    return 0
+  fi
+  echo 'false'
+  return 0
+}
+platform_does_not_support_windows() {
+  platform_does_not_support_windows_name="$1"
+  if "$(platform_is_windows)"
+  then
+    _cotowali_tmp_38="${platform_does_not_support_windows_name} does not support windows for now"
+
+    eprintln "$_cotowali_tmp_38"
+    exit 1
+  fi
+}
+platform_does_not_support_busybox() {
+  platform_does_not_support_busybox_name="$1"
+  shift
+  if [ $# -eq 0 ]
+  then
+    platform_does_not_support_busybox_command=''
+  else
+    platform_does_not_support_busybox_command="$1"
+  fi
+  if "$(platform_is_busybox "${platform_does_not_support_busybox_command}")"
+  then
+    _cotowali_tmp_39="${platform_does_not_support_busybox_name} does not support busybox for now"
+
+    eprintln "$_cotowali_tmp_39"
+    exit 1
+  fi
+}
+platform_shell() {
+  _cotowali_tmp_40='sh'
+
+  echo "$_cotowali_tmp_40"
+  return 0
+}
+_cotowali_tmp_41="cotowali_$(platform_system)_$(platform_machine).tar.gz"
+
+cotowali_release_archive_name="$_cotowali_tmp_41"
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/os.li
+# os.li
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+array_init "os_args" 0
+
+    array_assign os_args "$0" "$@"
+  
+os_getenv() {
+  os_getenv_key="$1"
+  os_getenv_value=''
+   os_getenv_value=$(printenv $os_getenv_key) 
+  echo "${os_getenv_value}"
+  return 0
+}
+os_setenv() {
+  os_setenv_key="$1"
+  shift
+  os_setenv_value="$1"
+   export $os_setenv_key=$os_setenv_value 
+}
+os_unsetenv() {
+  os_unsetenv_key="$1"
+   unset -v $os_unsetenv_key 
+}
+os_symlink() {
+  os_symlink_src="$1"
+  shift
+  os_symlink_dest="$1"
+  if "$(platform_is_windows)"
+  then
+    _cotowali_tmp_42='symlink does not supports windows for now'
+
+    eprintln "$_cotowali_tmp_42"
+    exit 1
+  fi
+  if "$(os_path_exists "${os_symlink_dest}")"
+  then
+    _cotowali_tmp_43="Filed to create symbolic link \`${os_symlink_dest}\`: File exists"
+
+    echo "$_cotowali_tmp_43" > /dev/null
+
+    return 0
+  fi
+  _cotowali_tmp_44='-s'
+
+  ln "$_cotowali_tmp_44" "${os_symlink_src}" "${os_symlink_dest}" > /dev/null
+}
+os_username() {
+  _cotowali_tmp_45='whoami'
+
+  if "$(platform_has_command "$_cotowali_tmp_45")"
+  then
+    whoami
+    return 0
+  fi
+  os_username_name=''
+   os_username_name="$USER" 
+  echo "${os_username_name}"
+  return 0
+}
+_cotowali_tmp_46='/'
+
+os_path_separator="$_cotowali_tmp_46"
+_cotowali_tmp_47=':'
+
+os_path_list_separator="$_cotowali_tmp_47"
+if "$(platform_is_windows)"
+then
+  _cotowali_tmp_48=\\
+
+  os_path_separator="$_cotowali_tmp_48"
+  _cotowali_tmp_49=';'
+
+  os_path_list_separator="$_cotowali_tmp_49"
+fi
+os_path_join() {
+  array_assign "_cotowali_tmp_50" "$@"
+  array_copy "os_path_join_parts" "_cotowali_tmp_50"
+  __array__string__join os_path_join_parts "${os_path_separator}"
+  return 0
+}
+os_path_is_abs() {
+  os_path_is_abs_path="$1"
+  ( [ "$(string__len "${os_path_is_abs_path}")" -gt 0 ] && [ "$(echo "${os_path_is_abs_path}" | awk -v RS='' -v i=0 '{printf "%s", substr($0, i + 1, 1) }' )"  =  "${os_path_separator}" ] ) && echo 'true' || echo 'false'
+  return 0
+}
+os_path_abs() {
+  os_path_abs_path="$1"
+  _cotowali_tmp_51='.'
+
+  if [ "${os_path_abs_path}"  =  '' ] || [ "${os_path_abs_path}"  =  "$_cotowali_tmp_51" ]
+  then
+    pwd775046991074756466
+    return 0
+  fi
+  os_path_abs_abs_path="${os_path_abs_path}"
+  if ! { "$(os_path_is_abs "${os_path_abs_path}")" ; }
+  then
+    os_path_abs_abs_path="$(os_path_join "$(pwd775046991074756466)" "${os_path_abs_path}")"
+  fi
+  if "$(platform_is_busybox)"
+  then
+    echo "${os_path_abs_abs_path}"
+    return 0
+  fi
+  _cotowali_tmp_53='realpath'
+
+  _cotowali_tmp_52='python'
+
+  if "$(platform_has_command "$_cotowali_tmp_52")" || "$(platform_has_command "$_cotowali_tmp_53")"
+  then
+    os_path_abs_abs_path="$(os_path_clean "${os_path_abs_abs_path}")"
+  fi
+  echo "${os_path_abs_abs_path}"
+  return 0
+}
+os_path_clean() {
+  os_path_clean_path="$1"
+  _cotowali_tmp_54='os::path::clean'
+
+  platform_does_not_support_busybox "$_cotowali_tmp_54" > /dev/null
+  os_path_clean_sep="${os_path_separator}"
+  os_path_clean_is_root="$(string__starts_with "${os_path_clean_path}" "${os_path_clean_sep}")"
+  _cotowali_tmp_55='realpath'
+
+  if "$(platform_has_command "$_cotowali_tmp_55")"
+  then
+    if "${os_path_clean_is_root}"
+    then
+      _cotowali_tmp_56='-sm'
+
+      realpath "$_cotowali_tmp_56" "${os_path_clean_path}"
+      return 0
+    else
+      _cotowali_tmp_59='.'
+
+      _cotowali_tmp_58='--relative-to'
+
+      _cotowali_tmp_57='-sm'
+
+      realpath "$_cotowali_tmp_57" "$_cotowali_tmp_58" "$_cotowali_tmp_59" "${os_path_clean_path}"
+      return 0
+    fi
+  fi
+  _cotowali_tmp_60='python'
+
+  if "$(platform_has_command "$_cotowali_tmp_60")"
+  then
+    _cotowali_tmp_62='import os, sys; print(os.path.normpath(sys.argv[1]))'
+
+    _cotowali_tmp_61='-c'
+
+    python "$_cotowali_tmp_61" "$_cotowali_tmp_62" "${os_path_clean_path}"
+    return 0
+  fi
+}
+os_path_exists() {
+  os_path_exists_path="$1"
+   [ -e "$os_path_exists_path" ] && cotowali_true_value || cotowali_false_value 
+}
+os_path_is_file() {
+  os_path_is_file_path="$1"
+   [ -f "$os_path_is_file_path" ] && cotowali_true_value || cotowali_false_value 
+}
+os_path_is_dir() {
+  os_path_is_dir_path="$1"
+   [ -d "$os_path_is_dir_path" ] && cotowali_true_value || cotowali_false_value 
+}
+os_path_is_symlink() {
+  os_path_is_symlink_path="$1"
+  if ! { "$(os_path_exists "${os_path_is_symlink_path}")" ; }
+  then
+    echo 'false'
+    return 0
+  fi
+   [ -L "$os_path_is_symlink_path" ] && cotowali_true_value || cotowali_false_value 
+}
+os_path_home() {
+  os_path_home_path=''
+   os_path_home_path="$HOME" 
+  echo "${os_path_home_path}"
+  return 0
+}
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/http.li
+# http.li
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+http_get() {
+  http_get_url="$1"
+  _cotowali_tmp_64='wget'
+
+  _cotowali_tmp_63='curl'
+
+  if "$(platform_has_command "$_cotowali_tmp_63")"
+  then
+    
+        curl -sSL --fail "$http_get_url" 2> '/dev/null' || {
+          echo 'http error' >&2
+          exit 1
+        }
+      
+  elif "$(platform_has_command "$_cotowali_tmp_64")"
+  then
+    
+        wget -q -O - --header 'Accept: */*' "$http_get_url" 2> '/dev/null' || {
+          echo 'http error' >&2
+          exit 1
+        }
+      
+  else
+    _cotowali_tmp_65='curl'
+
+    platform_required_command_not_found "$_cotowali_tmp_65" > /dev/null
+  fi
+}
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/tar.li
+# tar.li
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+tar_internal_prepare_dir() {
+  tar_internal_prepare_dir_path="$1"
+  if "$(os_path_is_file "${tar_internal_prepare_dir_path}")"
+  then
+    _cotowali_tmp_66="Fatal error: \`${tar_internal_prepare_dir_path}\` file exits"
+
+    eprintln "$_cotowali_tmp_66"
+  fi
+  if ! { "$(os_path_exists "${tar_internal_prepare_dir_path}")" ; }
+  then
+    mkdir_p "${tar_internal_prepare_dir_path}"
+  fi
+}
+_cotowali_tmp_67='tar.exe'
+
+if ! { "$(platform_has_command "$_cotowali_tmp_67")" ; }
+then
+  _cotowali_tmp_68='tar'
+
+  platform_require_command "$_cotowali_tmp_68"
+fi
+tar_create() {
+  tar_create_file="$1"
+   tar -cf '-' $tar_create_file 
+}
+tar_create_to() {
+  tar_create_to_archive="$1"
+  shift
+  tar_create_to_file="$1"
+   tar -cf $tar_create_to_archive $tar_create_to_file 
+}
+tar_extract() {
+   tar -xf '-' 
+}
+tar_extract_on() {
+  tar_extract_on_dir="$1"
+  tar_internal_prepare_dir "${tar_extract_on_dir}"
+   tar -xf '-' -C $tar_extract_on_dir 
+}
+tar_extract_file() {
+  tar_extract_file_archive="$1"
+   tar -xf $tar_extract_file_archive 
+}
+tar_extract_file_on() {
+  tar_extract_file_on_archive="$1"
+  shift
+  tar_extract_file_on_dir="$1"
+  tar_internal_prepare_dir "${tar_extract_file_on_dir}"
+   tar -xf $tar_extract_file_on_archive -C $tar_extract_file_on_dir 
+}
+tar_gz_create() {
+  tar_gz_create_file="$1"
+   tar -zcf '-' $tar_gz_create_file 
+}
+tar_gz_create_to() {
+  tar_gz_create_to_archive="$1"
+  shift
+  tar_gz_create_to_file="$1"
+   tar -zcf $tar_gz_create_to_archive $tar_gz_create_to_file 
+}
+tar_gz_extract() {
+   tar -zxf '-' 
+}
+tar_gz_extract_on() {
+  tar_gz_extract_on_dir="$1"
+  tar_internal_prepare_dir "${tar_gz_extract_on_dir}"
+   tar -zxf '-' -C $tar_gz_extract_on_dir 
+}
+tar_gz_extract_file() {
+  tar_gz_extract_file_archive="$1"
+   tar -zxf $tar_gz_extract_file_archive 
+}
+tar_gz_extract_file_on() {
+  tar_gz_extract_file_on_archive="$1"
+  shift
+  tar_gz_extract_file_on_dir="$1"
+  tar_internal_prepare_dir "${tar_gz_extract_file_on_dir}"
+   tar -zxf $tar_gz_extract_file_on_archive -C $tar_gz_extract_file_on_dir 
+}
+prepare_dir() {
+  prepare_dir_path="$1"
+  if "$(os_path_is_file "${prepare_dir_path}")"
+  then
+    _cotowali_tmp_69="Fatal error: Cannot create ${prepare_dir_path}. File exists"
+
+    eprintln "$_cotowali_tmp_69"
+    exit 1
+  fi
+  if ! { "$(os_path_exists "${prepare_dir_path}")" ; }
+  then
+    mkdir "${prepare_dir_path}"
+  fi
+}
+_cotowali_tmp_70='.konryu'
+
+konryu_path="$(os_path_join "$(os_path_home)" "$_cotowali_tmp_70")"
+prepare_dir "${konryu_path}"
+_cotowali_tmp_71='.cache'
+
+konryu_cache="$(os_path_join "${konryu_path}" "$_cotowali_tmp_71")"
+prepare_dir "${konryu_cache}"
+_cotowali_tmp_72='bin'
+
+konryu_bin_dir="$(os_path_join "${konryu_path}" "$_cotowali_tmp_72")"
+prepare_dir "${konryu_bin_dir}"
+_cotowali_tmp_73='konryu'
+
+konryu_sh="$(os_path_join "${konryu_bin_dir}" "$_cotowali_tmp_73")"
+_cotowali_tmp_74='https://raw.githubusercontent.com/cotowali/konryu/dist/konryu.sh'
+
+konryu_sh_url="$_cotowali_tmp_74"
+_cotowali_tmp_75='versions'
+
+versions_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_75")"
+version_path() {
+  version_path_version="$1"
+  os_path_join "${versions_path}" "${version_path_version}"
+  return 0
+}
+_cotowali_tmp_76='current'
+
+current_version_file_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_76")"
+_cotowali_tmp_77='cotowali'
+
+cotowali_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_77")"
+json_field() {
+  json_field_key="$1"
+  _cotowali_tmp_80="^${json_field_key}:"
+
+  _cotowali_tmp_79='[", ]'
+
+  _cotowali_tmp_78="\"${json_field_key}\""
+
+  filter "$_cotowali_tmp_78" | replace "$_cotowali_tmp_79" '' | replace "$_cotowali_tmp_80" ''
+  return 0
+}
+get_releases() {
+  _cotowali_tmp_82='tag_name'
+
+  _cotowali_tmp_81='https://api.github.com/repos/cotowali/cotowali/releases'
+
+  http_get "$_cotowali_tmp_81" | json_field "$_cotowali_tmp_82"
+  return 0
+}
+print_releases() {
+  for _cotowali_tmp_83 in $(get_releases)
+  do
+    print_releases_for_2_release="$(eval echo $_cotowali_tmp_83)"
+    println "${print_releases_for_2_release}"
+  done
+}
+specified_too_many_versions() {
+  _cotowali_tmp_84='Too many arguments. Specify just one version'
+
+  eprintln "$_cotowali_tmp_84"
+  exit 1
+}
+is_installed_version() {
+  is_installed_version_target_version="$1"
+  for _cotowali_tmp_85 in $(get_installed_versions)
+  do
+    is_installed_version_for_3_version="$(eval echo $_cotowali_tmp_85)"
+    if [ "${is_installed_version_for_3_version}"  =  "${is_installed_version_target_version}" ]
+    then
+      echo 'true'
+      return 0
+    fi
+  done
+  echo 'false'
+  return 0
+}
+current_version() {
+  if ! { "$(os_path_is_file "${current_version_file_path}")" ; }
+  then
+    echo ''
+    return 0
+  fi
+  cat "${current_version_file_path}" | first16391136280022780767
+  return 0
+}
+switch_version() {
+  switch_version_version="$1"
+  if "$(os_path_exists "${cotowali_path}")"
+  then
+    rm_r "${cotowali_path}"
+  fi
+  _cotowali_tmp_86='cotowali'
+
+  os_symlink "$(os_path_join "$(version_path "${switch_version_version}")" "$_cotowali_tmp_86")" "${cotowali_path}"
+  echo "${switch_version_version}" > "${current_version_file_path}"
+  _cotowali_tmp_87="switched to cotowali ${switch_version_version}"
+
+  println "$_cotowali_tmp_87"
+}
+install_version() {
+  install_version_version="$1"
+  install_version_releases="$(get_releases)"
+  _cotowali_tmp_88='latest'
+
+  if [ "${install_version_version}"  =  "$_cotowali_tmp_88" ]
+  then
+    install_version_version="$(echo "${install_version_releases}" | first16391136280022780767 )"
+  else
+    install_version_else_7_found='false'
+    for _cotowali_tmp_89 in ${install_version_releases}
+    do
+      install_version_else_7_for_7_release="$(eval echo $_cotowali_tmp_89)"
+      if [ "${install_version_else_7_for_7_release}"  =  "${install_version_version}" ]
+      then
+        install_version_else_7_found='true'
+        break
+      fi
+    done
+    if ! { "${install_version_else_7_found}" ; }
+    then
+      _cotowali_tmp_90="Cannot install ${install_version_version}: No such version"
+
+      eprintln "$_cotowali_tmp_90"
+      exit 1
+    fi
+  fi
+  install_version_dir="$(version_path "${install_version_version}")"
+  _cotowali_tmp_91='https://github.com/cotowali/cotowali/releases/download'
+
+  install_version_url_base="$_cotowali_tmp_91"
+  install_version_filename="${cotowali_release_archive_name}"
+  _cotowali_tmp_92="Downloading ${install_version_filename} ..."
+
+  println "$_cotowali_tmp_92"
+  _cotowali_tmp_93="${install_version_url_base}/${install_version_version}/${install_version_filename}"
+
+  http_get "$_cotowali_tmp_93" | tar_gz_extract_on "${install_version_dir}" > /dev/null
+  _cotowali_tmp_94="Successfully installed cotowali ${install_version_version} on ${install_version_dir}"
+
+  println "$_cotowali_tmp_94"
+  if [ "$(current_version)"  =  '' ]
+  then
+    switch_version "${install_version_version}" > /dev/null
+  elif [ "$(current_version)"  !=  "${install_version_version}" ]
+  then
+    _cotowali_tmp_95="Do you want to use ${install_version_version} now?"
+
+    if "$(confirm_with_yes_default "$_cotowali_tmp_95")"
+    then
+      switch_version "${install_version_version}"
+    fi
+  fi
+}
+confirm_with_yes_default() {
+  confirm_with_yes_default_message="$1"
+  confirm_with_yes_default_ans=''
+  while 'true'
+  do
+    _cotowali_tmp_96="${confirm_with_yes_default_message} [Y/n]: "
+
+    confirm_with_yes_default_ans="$(input_tty "$_cotowali_tmp_96")"
+    _cotowali_tmp_100='N'
+
+    _cotowali_tmp_98='yes'
+
+    _cotowali_tmp_97='Y'
+
+    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_97" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_98" ] || [ "${confirm_with_yes_default_ans}"  =  '' ]
+    then
+      _cotowali_tmp_99='y'
+
+      confirm_with_yes_default_ans="$_cotowali_tmp_99"
+    elif [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_100" ]
+    then
+      _cotowali_tmp_101='n'
+
+      confirm_with_yes_default_ans="$_cotowali_tmp_101"
+    fi
+    _cotowali_tmp_104='n'
+
+    _cotowali_tmp_103='no'
+
+    _cotowali_tmp_102='y'
+
+    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_102" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_103" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_104" ]
+    then
+      break
+    fi
+    _cotowali_tmp_105='yes or no'
+
+    eprintln "$_cotowali_tmp_105" > /dev/null
+  done
+  _cotowali_tmp_106='y'
+
+  echo "$( [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_106" ] && echo 'true' || echo 'false' )"
+  return 0
+}
+cmd_install_konryu() {
+  http_get "${konryu_sh_url}" > "${konryu_sh}"
+  _cotowali_tmp_107='Successfully installed cotowali konryu'
+
+  println "$_cotowali_tmp_107"
+  println ''
+  _cotowali_tmp_108="Do you want to install cotowali now?"
+
+  if "$(confirm_with_yes_default "$_cotowali_tmp_108")"
+  then
+    _cotowali_tmp_109='latest'
+
+    install_version "$_cotowali_tmp_109"
+  fi
+  println ''
+  _cotowali_tmp_110="Add \`${konryu_bin_dir}\` to your PATH to use konryu command"
+
+  println "$_cotowali_tmp_110"
+  _cotowali_tmp_111="export PATH=\"${konryu_bin_dir}:\${PATH}\""
+
+  println "$_cotowali_tmp_111"
+}
+cmd_init() {
+  _cotowali_tmp_113='bin'
+
+  _cotowali_tmp_112="$(os_path_join "${cotowali_path}" "$_cotowali_tmp_113"):\${PATH}"
+
+  cmd_init_new_path="$_cotowali_tmp_112"
+  _cotowali_tmp_114='# usage: eval "$(konryu init)"'
+
+  println "$_cotowali_tmp_114"
+  _cotowali_tmp_115="export PATH=\"${cmd_init_new_path}\""
+
+  println "$_cotowali_tmp_115"
+  exit 0
+}
+cmd_releases() {
+  print_releases
+  exit 0
+}
+cmd_current() {
+  cmd_current_version="$(current_version)"
+  if [ "${cmd_current_version}"  !=  '' ]
+  then
+    println "${cmd_current_version}"
+  else
+    _cotowali_tmp_116='cotowali is not enabled'
+
+    println "$_cotowali_tmp_116"
+  fi
+  exit 0
+}
+cmd_install() {
+  array_copy "cmd_install_args" "$1"
+  _cotowali_tmp_117='latest'
+
+  cmd_install_version="$_cotowali_tmp_117"
+  if [ "$(__array__any__len cmd_install_args)" -gt 1 ]
+  then
+    specified_too_many_versions
+  elif [ "$(__array__any__len cmd_install_args)" -gt 0 ]
+  then
+    cmd_install_version="$(array_get cmd_install_args 0 )"
+  fi
+  install_version "${cmd_install_version}"
+  exit 0
+}
+cmd_uninstall() {
+  array_copy "cmd_uninstall_args" "$1"
+  if [ "$(__array__any__len cmd_uninstall_args)" -eq 0 ]
+  then
+    _cotowali_tmp_118='No version is specified'
+
+    eprintln "$_cotowali_tmp_118"
+    exit 1
+  elif [ "$(__array__any__len cmd_uninstall_args)" -gt 1 ]
+  then
+    specified_too_many_versions
+  fi
+  cmd_uninstall_version="$(array_get cmd_uninstall_args 0 )"
+  if ! { "$(is_installed_version "${cmd_uninstall_version}")" ; }
+  then
+    _cotowali_tmp_119="Cannot uninstall ${cmd_uninstall_version}: No such version"
+
+    eprintln "$_cotowali_tmp_119"
+    exit 1
+  fi
+  rm_r "$(version_path "${cmd_uninstall_version}")"
+  _cotowali_tmp_120="Uninstalled cotowali ${cmd_uninstall_version}"
+
+  println "$_cotowali_tmp_120"
+}
+get_installed_versions() {
+  for _cotowali_tmp_121 in $(ls "${versions_path}")
+  do
+    get_installed_versions_for_21_path="$(eval echo $_cotowali_tmp_121)"
+    echo "${get_installed_versions_for_21_path}"
+  done
+}
+cmd_versions() {
+  for _cotowali_tmp_122 in $(get_installed_versions)
+  do
+    cmd_versions_for_22_path="$(eval echo $_cotowali_tmp_122)"
+    println "${cmd_versions_for_22_path}"
+  done
+  exit 0
+}
+cmd_use() {
+  array_copy "cmd_use_args" "$1"
+  if [ "$(__array__any__len cmd_use_args)" -eq 0 ]
+  then
+    _cotowali_tmp_123='No version is specified'
+
+    eprintln "$_cotowali_tmp_123"
+    exit 1
+  fi
+  if [ "$(__array__any__len cmd_use_args)" -gt 1 ]
+  then
+    specified_too_many_versions
+  fi
+  cmd_use_target_version="$(array_get cmd_use_args 0 )"
+  cmd_use_installed_versions="$(get_installed_versions)"
+  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first16391136280022780767 )"
+  if [ "${cmd_use_latest_version}"  =  '' ]
+  then
+    _cotowali_tmp_124='cotowali is not installed'
+
+    eprintln "$_cotowali_tmp_124"
+    exit 1
+  fi
+  _cotowali_tmp_125='latest'
+
+  if [ "${cmd_use_target_version}"  =  "$_cotowali_tmp_125" ]
+  then
+    cmd_use_target_version="${cmd_use_latest_version}"
+  fi
+  if ! { "$(is_installed_version "${cmd_use_target_version}")" ; }
+  then
+    _cotowali_tmp_126="Cannot use ${cmd_use_target_version}: No such version"
+
+    eprintln "$_cotowali_tmp_126"
+    exit 1
+  fi
+  switch_version "${cmd_use_target_version}"
+  exit 0
+}
+has_help_flag='false'
+is_error='false'
+self=''
+command=''
+array_init "args" 0 
+for _cotowali_tmp_127 in $(array_elements os_args)
+
+do
+  for_28_arg="$(eval echo $_cotowali_tmp_127)"
+  if [ "${self}"  =  '' ]
+  then
+    self="${for_28_arg}"
+    continue
+  fi
+  _cotowali_tmp_130='-'
+
+  _cotowali_tmp_129='--help'
+
+  _cotowali_tmp_128='-h'
+
+  if [ "${for_28_arg}"  =  "$_cotowali_tmp_128" ] || [ "${for_28_arg}"  =  "$_cotowali_tmp_129" ]
+  then
+    has_help_flag='true'
+  elif [ "$(echo "${for_28_arg}" | awk -v RS='' -v i=0 '{printf "%s", substr($0, i + 1, 1) }' )"  =  "$_cotowali_tmp_130" ]
+  then
+    _cotowali_tmp_131="unknown option \`${for_28_arg}\`"
+
+    eprintln "$_cotowali_tmp_131"
+    is_error='true'
+  elif [ "${command}"  =  '' ]
+  then
+    command="${for_28_arg}"
+  else
+    array_assign "_cotowali_tmp_133" "${for_28_arg}"
+    array_copy _cotowali_tmp_132 args
+    array_push_array _cotowali_tmp_132 _cotowali_tmp_133
+    array_copy "args" _cotowali_tmp_132
+  fi
+done
+if ! { "${is_error}" ; }
+then
+  _cotowali_tmp_141='init'
+
+  _cotowali_tmp_140='versions'
+
+  _cotowali_tmp_139='current'
+
+  _cotowali_tmp_138='releases'
+
+  _cotowali_tmp_137='use'
+
+  _cotowali_tmp_136='uninstall'
+
+  _cotowali_tmp_135='install'
+
+  _cotowali_tmp_134='help'
+
+  if [ "${command}"  =  '' ]
+  then
+    if ! { "$(os_path_exists "${konryu_sh}")" ; }
+    then
+      cmd_install_konryu
+    else
+      has_help_flag='true'
+    fi
+  elif [ "${command}"  =  "$_cotowali_tmp_134" ]
+  then
+    has_help_flag='true'
+  elif [ "${command}"  =  "$_cotowali_tmp_135" ]
+  then
+    cmd_install args
+  elif [ "${command}"  =  "$_cotowali_tmp_136" ]
+  then
+    cmd_uninstall args
+  elif [ "${command}"  =  "$_cotowali_tmp_137" ]
+  then
+    cmd_use args
+  elif [ "${command}"  =  "$_cotowali_tmp_138" ]
+  then
+    cmd_releases
+  elif [ "${command}"  =  "$_cotowali_tmp_139" ]
+  then
+    cmd_current
+  elif [ "${command}"  =  "$_cotowali_tmp_140" ]
+  then
+    cmd_versions
+  elif [ "${command}"  =  "$_cotowali_tmp_141" ]
+  then
+    cmd_init
+  else
+    _cotowali_tmp_142="unknown command \`${command}\`"
+
+    eprintln "$_cotowali_tmp_142"
+    is_error='true'
+  fi
+fi
+if "${has_help_flag}" || "${is_error}"
+then
+  _cotowali_tmp_143='Konryu - Cotowali installer and version manager
+
+Usage: kornyu [options] [command] [version]
+
+Options:
+  -h --help - Print help message
+
+Commands:
+  help      - Print help message
+  init      - Print shell code to configure environment
+  install   - Install cotowali release
+  uninstall - uninstall specified version
+  use       - use specified version
+  releases  - List available cotowali releases
+  versions  - List installed cotowali versions
+'
+
+  if_34_msg="$_cotowali_tmp_143"
+  if "${is_error}"
+  then
+    eprint "${if_34_msg}"
+    exit 1
+  else
+    print "${if_34_msg}"
+    exit 0
+  fi
+fi
