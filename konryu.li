@@ -129,9 +129,13 @@ fn confirm_with_yes_default(message: string): bool {
   return ans == 'y'
 }
 
-fn cmd_install_konryu() {
+fn download_konryu_sh() {
   println("Downloading konryu ...")
   http::get(konryu_sh_url) |> konryu_sh
+}
+
+fn cmd_install_konryu() {
+  download_konryu_sh()
   println('Successfully installed konryu')
   println('')
   if confirm_with_yes_default("Do you want to install cotowali now?") {
@@ -142,6 +146,11 @@ fn cmd_install_konryu() {
   println('')
   println("Add `$konryu_bin_dir` to your PATH to use konryu command")
   println("export PATH=\"$konryu_bin_dir:\${PATH}\"")
+}
+
+fn cmd_update_konryu() {
+  download_konryu_sh()
+  println('Successfully updated konryu')
 }
 
 fn cmd_init() {
@@ -282,6 +291,8 @@ if !is_error {
     cmd_versions()
   } else if command == 'init' {
     cmd_init()
+  } else if command == 'update' {
+    cmd_update_konryu()
   } else {
     eprintln("unknown command `$command`")
     is_error = true
@@ -303,6 +314,8 @@ Commands:
   use       - use specified version
   releases  - List available cotowali releases
   versions  - List installed cotowali versions
+
+  update - Update konryu
 '
   if is_error {
     eprint(msg)
