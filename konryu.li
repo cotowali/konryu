@@ -18,11 +18,15 @@ var konryu_path = os::path::join(os::path::home(), '.konryu')
 prepare_dir(konryu_path)
 var konryu_cache = os::path::join(konryu_path, '.cache')
 prepare_dir(konryu_cache)
+
 var versions_path = os::path::join(konryu_path, 'versions')
 fn version_path(version: string): string {
   return os::path::join(versions_path, version)
 }
 
+var current_version_file_path = os::path::join(konryu_path, 'current')
+
+var cotowali_path = os::path::join(konryu_path, 'cotowali')
 
 fn ...string |> json_field(key: string) |> ...string {
   return filter("\"$key\"") |> replace('[", ]', '') |> replace("^$key:", '')
@@ -124,6 +128,39 @@ fn cmd_versions() {
   exit(0)
 }
 
+fn cmd_use(args: []string) {
+  if args.len() == 0 {
+    eprintln('No version is specified')
+    exit(1)
+  }
+  if args.len() > 1 {
+    specified_too_many_versions()
+  }
+  var target_version = args[0]
+  var installed_versions = get_installed_versions()
+  var latest_version =  installed_versions |> first()
+  if latest_version == '' {
+    eprintln('cotowali is not installed')
+    exit(1)
+  }
+  if target_version == 'latest' {
+    target_version = latest_version
+  }
+  if !is_installed_version(target_version) {
+    eprintln("Cannot use $target_version: No such version")
+    exit(1)
+  }
+
+  if os::path::exists(cotowali_path) {
+    rm_r(cotowali_path)
+  }
+  os::symlink(os::path::join(version_path(target_version), 'cotowali'), cotowali_path)
+  target_version |> current_version_file_path
+
+  println("switched to cotowali ${target_version}")
+  exit(0)
+}
+
 var has_help_flag = false
 var is_error = false
 var self = ''
@@ -158,6 +195,8 @@ if !is_error {
     cmd_install(args)
   } else if command == 'uninstall' {
     cmd_uninstall(args)
+  } else if command == 'use' {
+    cmd_use(args)
   } else if command == 'releases' {
     cmd_releases()
   } else if command == 'versions' {
