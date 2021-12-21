@@ -228,18 +228,18 @@ input_tty() {
   echo "${input_tty_res}"
   return 0
 }
-head15336741435362492519() {
+head5069352155056463458() {
   head_n="$1"
    head -n $head_n 
 }
-first5160928157541451375() {
+first661159289664615648() {
    head -n 1 
 }
-tail14836495486010767342() {
+tail8456722560221712430() {
   tail_n="$1"
    tail -n $tail_n 
 }
-last18384275908501227363() {
+last194994101630172859() {
    tail -n 1 
 }
 count() {
@@ -320,7 +320,7 @@ mkdir_p() {
     mkdir -p "$@"
   
 }
-pwd10469673534832865224() {
+pwd4188497422265497238() {
    pwd 
 }
 
@@ -337,7 +337,7 @@ rm_r() {
 
 # info: fn touch(files)
 
-which10203798116013556076() {
+which10713021740429752268() {
   which_name="$1"
   which_res=
   
@@ -827,13 +827,13 @@ os_path_abs() {
 
   if [ "${os_path_abs_path}"  =  '' ] || [ "${os_path_abs_path}"  =  "$_cotowali_tmp_51" ]
   then
-    pwd10469673534832865224
+    pwd4188497422265497238
     return 0
   fi
   os_path_abs_abs_path="${os_path_abs_path}"
   if ! { "$(os_path_is_abs "${os_path_abs_path}")" ; }
   then
-    os_path_abs_abs_path="$(os_path_join "$(pwd10469673534832865224)" "${os_path_abs_path}")"
+    os_path_abs_abs_path="$(os_path_join "$(pwd4188497422265497238)" "${os_path_abs_path}")"
   fi
   if "$(platform_is_busybox)"
   then
@@ -1037,13 +1037,614 @@ tar_gz_extract_file_on() {
   tar_internal_prepare_dir "${tar_gz_extract_file_on_dir}"
    tar -zxf $tar_gz_extract_file_on_archive -C $tar_gz_extract_file_on_dir 
 }
+# file: /home/zakuro/src/github.com/cotowali/cotowali/std/term.li
+# term.li
+# Copyright (c) 2021 zakuro <z@kuro.red>. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+term_text() {
+  term_text_s="$1"
+  echo "${term_text_s}"
+  return 0
+}
+term_format() {
+  term_format_text="$1"
+  shift
+  term_format_open="$1"
+  shift
+  term_format_close="$1"
+  _cotowali_tmp_69="$(printf '\33')[${term_format_open}m${term_format_text}$(printf '\33')[${term_format_close}m"
+
+  echo "$_cotowali_tmp_69"
+  return 0
+}
+term_Text__format() {
+  term_Text__format_text="$1"
+  shift
+  term_Text__format_open="$1"
+  shift
+  term_Text__format_close="$1"
+  term_format "${term_Text__format_text}" "${term_Text__format_open}" "${term_Text__format_close}"
+  return 0
+}
+term_reset() {
+  term_reset_msg="$1"
+  _cotowali_tmp_71='0'
+
+  _cotowali_tmp_70='0'
+
+  term_format "${term_reset_msg}" "$_cotowali_tmp_70" "$_cotowali_tmp_71"
+  return 0
+}
+term_Text__reset() {
+  term_Text__reset_text="$1"
+  term_reset "${term_Text__reset_text}"
+  return 0
+}
+term_bold() {
+  term_bold_msg="$1"
+  _cotowali_tmp_73='22'
+
+  _cotowali_tmp_72='1'
+
+  term_format "${term_bold_msg}" "$_cotowali_tmp_72" "$_cotowali_tmp_73"
+  return 0
+}
+term_Text__bold() {
+  term_Text__bold_text="$1"
+  term_bold "${term_Text__bold_text}"
+  return 0
+}
+term_dim() {
+  term_dim_msg="$1"
+  _cotowali_tmp_75='22'
+
+  _cotowali_tmp_74='2'
+
+  term_format "${term_dim_msg}" "$_cotowali_tmp_74" "$_cotowali_tmp_75"
+  return 0
+}
+term_Text__dim() {
+  term_Text__dim_text="$1"
+  term_dim "${term_Text__dim_text}"
+  return 0
+}
+term_italic() {
+  term_italic_msg="$1"
+  _cotowali_tmp_77='23'
+
+  _cotowali_tmp_76='3'
+
+  term_format "${term_italic_msg}" "$_cotowali_tmp_76" "$_cotowali_tmp_77"
+  return 0
+}
+term_Text__italic() {
+  term_Text__italic_text="$1"
+  term_italic "${term_Text__italic_text}"
+  return 0
+}
+term_underline() {
+  term_underline_msg="$1"
+  _cotowali_tmp_79='24'
+
+  _cotowali_tmp_78='4'
+
+  term_format "${term_underline_msg}" "$_cotowali_tmp_78" "$_cotowali_tmp_79"
+  return 0
+}
+term_Text__underline() {
+  term_Text__underline_text="$1"
+  term_underline "${term_Text__underline_text}"
+  return 0
+}
+term_inverse() {
+  term_inverse_msg="$1"
+  _cotowali_tmp_81='27'
+
+  _cotowali_tmp_80='7'
+
+  term_format "${term_inverse_msg}" "$_cotowali_tmp_80" "$_cotowali_tmp_81"
+  return 0
+}
+term_Text__inverse() {
+  term_Text__inverse_text="$1"
+  term_inverse "${term_Text__inverse_text}"
+  return 0
+}
+term_hidden() {
+  term_hidden_msg="$1"
+  _cotowali_tmp_83='28'
+
+  _cotowali_tmp_82='8'
+
+  term_format "${term_hidden_msg}" "$_cotowali_tmp_82" "$_cotowali_tmp_83"
+  return 0
+}
+term_Text__hidden() {
+  term_Text__hidden_text="$1"
+  term_hidden "${term_Text__hidden_text}"
+  return 0
+}
+term_strikethrough() {
+  term_strikethrough_msg="$1"
+  _cotowali_tmp_85='29'
+
+  _cotowali_tmp_84='9'
+
+  term_format "${term_strikethrough_msg}" "$_cotowali_tmp_84" "$_cotowali_tmp_85"
+  return 0
+}
+term_Text__strikethrough() {
+  term_Text__strikethrough_text="$1"
+  term_strikethrough "${term_Text__strikethrough_text}"
+  return 0
+}
+term_black() {
+  term_black_msg="$1"
+  _cotowali_tmp_87='39'
+
+  _cotowali_tmp_86='30'
+
+  term_format "${term_black_msg}" "$_cotowali_tmp_86" "$_cotowali_tmp_87"
+  return 0
+}
+term_Text__black() {
+  term_Text__black_text="$1"
+  term_black "${term_Text__black_text}"
+  return 0
+}
+term_red() {
+  term_red_msg="$1"
+  _cotowali_tmp_89='39'
+
+  _cotowali_tmp_88='31'
+
+  term_format "${term_red_msg}" "$_cotowali_tmp_88" "$_cotowali_tmp_89"
+  return 0
+}
+term_Text__red() {
+  term_Text__red_text="$1"
+  term_red "${term_Text__red_text}"
+  return 0
+}
+term_green() {
+  term_green_msg="$1"
+  _cotowali_tmp_91='39'
+
+  _cotowali_tmp_90='32'
+
+  term_format "${term_green_msg}" "$_cotowali_tmp_90" "$_cotowali_tmp_91"
+  return 0
+}
+term_Text__green() {
+  term_Text__green_text="$1"
+  term_green "${term_Text__green_text}"
+  return 0
+}
+term_yellow() {
+  term_yellow_msg="$1"
+  _cotowali_tmp_93='39'
+
+  _cotowali_tmp_92='33'
+
+  term_format "${term_yellow_msg}" "$_cotowali_tmp_92" "$_cotowali_tmp_93"
+  return 0
+}
+term_Text__yellow() {
+  term_Text__yellow_text="$1"
+  term_yellow "${term_Text__yellow_text}"
+  return 0
+}
+term_blue() {
+  term_blue_msg="$1"
+  _cotowali_tmp_95='39'
+
+  _cotowali_tmp_94='34'
+
+  term_format "${term_blue_msg}" "$_cotowali_tmp_94" "$_cotowali_tmp_95"
+  return 0
+}
+term_Text__blue() {
+  term_Text__blue_text="$1"
+  term_blue "${term_Text__blue_text}"
+  return 0
+}
+term_magenta() {
+  term_magenta_msg="$1"
+  _cotowali_tmp_97='39'
+
+  _cotowali_tmp_96='35'
+
+  term_format "${term_magenta_msg}" "$_cotowali_tmp_96" "$_cotowali_tmp_97"
+  return 0
+}
+term_Text__magenta() {
+  term_Text__magenta_text="$1"
+  term_magenta "${term_Text__magenta_text}"
+  return 0
+}
+term_cyan() {
+  term_cyan_msg="$1"
+  _cotowali_tmp_99='39'
+
+  _cotowali_tmp_98='36'
+
+  term_format "${term_cyan_msg}" "$_cotowali_tmp_98" "$_cotowali_tmp_99"
+  return 0
+}
+term_Text__cyan() {
+  term_Text__cyan_text="$1"
+  term_cyan "${term_Text__cyan_text}"
+  return 0
+}
+term_white() {
+  term_white_msg="$1"
+  _cotowali_tmp_101='39'
+
+  _cotowali_tmp_100='37'
+
+  term_format "${term_white_msg}" "$_cotowali_tmp_100" "$_cotowali_tmp_101"
+  return 0
+}
+term_Text__white() {
+  term_Text__white_text="$1"
+  term_white "${term_Text__white_text}"
+  return 0
+}
+term_bg_black() {
+  term_bg_black_msg="$1"
+  _cotowali_tmp_103='49'
+
+  _cotowali_tmp_102='40'
+
+  term_format "${term_bg_black_msg}" "$_cotowali_tmp_102" "$_cotowali_tmp_103"
+  return 0
+}
+term_Text__bg_black() {
+  term_Text__bg_black_text="$1"
+  term_bg_black "${term_Text__bg_black_text}"
+  return 0
+}
+term_bg_red() {
+  term_bg_red_msg="$1"
+  _cotowali_tmp_105='49'
+
+  _cotowali_tmp_104='41'
+
+  term_format "${term_bg_red_msg}" "$_cotowali_tmp_104" "$_cotowali_tmp_105"
+  return 0
+}
+term_Text__bg_red() {
+  term_Text__bg_red_text="$1"
+  term_bg_red "${term_Text__bg_red_text}"
+  return 0
+}
+term_bg_green() {
+  term_bg_green_msg="$1"
+  _cotowali_tmp_107='49'
+
+  _cotowali_tmp_106='42'
+
+  term_format "${term_bg_green_msg}" "$_cotowali_tmp_106" "$_cotowali_tmp_107"
+  return 0
+}
+term_Text__bg_green() {
+  term_Text__bg_green_text="$1"
+  term_bg_green "${term_Text__bg_green_text}"
+  return 0
+}
+term_bg_yellow() {
+  term_bg_yellow_msg="$1"
+  _cotowali_tmp_109='49'
+
+  _cotowali_tmp_108='43'
+
+  term_format "${term_bg_yellow_msg}" "$_cotowali_tmp_108" "$_cotowali_tmp_109"
+  return 0
+}
+term_Text__bg_yellow() {
+  term_Text__bg_yellow_text="$1"
+  term_bg_yellow "${term_Text__bg_yellow_text}"
+  return 0
+}
+term_bg_blue() {
+  term_bg_blue_msg="$1"
+  _cotowali_tmp_111='49'
+
+  _cotowali_tmp_110='44'
+
+  term_format "${term_bg_blue_msg}" "$_cotowali_tmp_110" "$_cotowali_tmp_111"
+  return 0
+}
+term_Text__bg_blue() {
+  term_Text__bg_blue_text="$1"
+  term_bg_blue "${term_Text__bg_blue_text}"
+  return 0
+}
+term_bg_magenta() {
+  term_bg_magenta_msg="$1"
+  _cotowali_tmp_113='49'
+
+  _cotowali_tmp_112='45'
+
+  term_format "${term_bg_magenta_msg}" "$_cotowali_tmp_112" "$_cotowali_tmp_113"
+  return 0
+}
+term_Text__bg_magenta() {
+  term_Text__bg_magenta_text="$1"
+  term_bg_magenta "${term_Text__bg_magenta_text}"
+  return 0
+}
+term_bg_cyan() {
+  term_bg_cyan_msg="$1"
+  _cotowali_tmp_115='49'
+
+  _cotowali_tmp_114='46'
+
+  term_format "${term_bg_cyan_msg}" "$_cotowali_tmp_114" "$_cotowali_tmp_115"
+  return 0
+}
+term_Text__bg_cyan() {
+  term_Text__bg_cyan_text="$1"
+  term_bg_cyan "${term_Text__bg_cyan_text}"
+  return 0
+}
+term_bg_white() {
+  term_bg_white_msg="$1"
+  _cotowali_tmp_117='49'
+
+  _cotowali_tmp_116='47'
+
+  term_format "${term_bg_white_msg}" "$_cotowali_tmp_116" "$_cotowali_tmp_117"
+  return 0
+}
+term_Text__bg_white() {
+  term_Text__bg_white_text="$1"
+  term_bg_white "${term_Text__bg_white_text}"
+  return 0
+}
+term_gray() {
+  term_gray_msg="$1"
+  term_bright_black "${term_gray_msg}"
+  return 0
+}
+term_Text__gray() {
+  term_Text__gray_text="$1"
+  term_gray "${term_Text__gray_text}"
+  return 0
+}
+term_bright_black() {
+  term_bright_black_msg="$1"
+  _cotowali_tmp_119='39'
+
+  _cotowali_tmp_118='90'
+
+  term_format "${term_bright_black_msg}" "$_cotowali_tmp_118" "$_cotowali_tmp_119"
+  return 0
+}
+term_Text__bright_black() {
+  term_Text__bright_black_text="$1"
+  term_bright_black "${term_Text__bright_black_text}"
+  return 0
+}
+term_bright_red() {
+  term_bright_red_msg="$1"
+  _cotowali_tmp_121='39'
+
+  _cotowali_tmp_120='91'
+
+  term_format "${term_bright_red_msg}" "$_cotowali_tmp_120" "$_cotowali_tmp_121"
+  return 0
+}
+term_Text__bright_red() {
+  term_Text__bright_red_text="$1"
+  term_bright_red "${term_Text__bright_red_text}"
+  return 0
+}
+term_bright_green() {
+  term_bright_green_msg="$1"
+  _cotowali_tmp_123='39'
+
+  _cotowali_tmp_122='92'
+
+  term_format "${term_bright_green_msg}" "$_cotowali_tmp_122" "$_cotowali_tmp_123"
+  return 0
+}
+term_Text__bright_green() {
+  term_Text__bright_green_text="$1"
+  term_bright_green "${term_Text__bright_green_text}"
+  return 0
+}
+term_bright_yellow() {
+  term_bright_yellow_msg="$1"
+  _cotowali_tmp_125='39'
+
+  _cotowali_tmp_124='93'
+
+  term_format "${term_bright_yellow_msg}" "$_cotowali_tmp_124" "$_cotowali_tmp_125"
+  return 0
+}
+term_Text__bright_yellow() {
+  term_Text__bright_yellow_text="$1"
+  term_bright_yellow "${term_Text__bright_yellow_text}"
+  return 0
+}
+term_bright_blue() {
+  term_bright_blue_msg="$1"
+  _cotowali_tmp_127='39'
+
+  _cotowali_tmp_126='94'
+
+  term_format "${term_bright_blue_msg}" "$_cotowali_tmp_126" "$_cotowali_tmp_127"
+  return 0
+}
+term_Text__bright_blue() {
+  term_Text__bright_blue_text="$1"
+  term_bright_blue "${term_Text__bright_blue_text}"
+  return 0
+}
+term_bright_magenta() {
+  term_bright_magenta_msg="$1"
+  _cotowali_tmp_129='39'
+
+  _cotowali_tmp_128='95'
+
+  term_format "${term_bright_magenta_msg}" "$_cotowali_tmp_128" "$_cotowali_tmp_129"
+  return 0
+}
+term_Text__bright_magenta() {
+  term_Text__bright_magenta_text="$1"
+  term_bright_magenta "${term_Text__bright_magenta_text}"
+  return 0
+}
+term_bright_cyan() {
+  term_bright_cyan_msg="$1"
+  _cotowali_tmp_131='39'
+
+  _cotowali_tmp_130='96'
+
+  term_format "${term_bright_cyan_msg}" "$_cotowali_tmp_130" "$_cotowali_tmp_131"
+  return 0
+}
+term_Text__bright_cyan() {
+  term_Text__bright_cyan_text="$1"
+  term_bright_cyan "${term_Text__bright_cyan_text}"
+  return 0
+}
+term_bright_white() {
+  term_bright_white_msg="$1"
+  _cotowali_tmp_133='39'
+
+  _cotowali_tmp_132='97'
+
+  term_format "${term_bright_white_msg}" "$_cotowali_tmp_132" "$_cotowali_tmp_133"
+  return 0
+}
+term_Text__bright_white() {
+  term_Text__bright_white_text="$1"
+  term_bright_white "${term_Text__bright_white_text}"
+  return 0
+}
+term_bright_bg_black() {
+  term_bright_bg_black_msg="$1"
+  _cotowali_tmp_135='49'
+
+  _cotowali_tmp_134='100'
+
+  term_format "${term_bright_bg_black_msg}" "$_cotowali_tmp_134" "$_cotowali_tmp_135"
+  return 0
+}
+term_Text__bright_bg_black() {
+  term_Text__bright_bg_black_text="$1"
+  term_bright_bg_black "${term_Text__bright_bg_black_text}"
+  return 0
+}
+term_bright_bg_red() {
+  term_bright_bg_red_msg="$1"
+  _cotowali_tmp_137='49'
+
+  _cotowali_tmp_136='101'
+
+  term_format "${term_bright_bg_red_msg}" "$_cotowali_tmp_136" "$_cotowali_tmp_137"
+  return 0
+}
+term_Text__bright_bg_red() {
+  term_Text__bright_bg_red_text="$1"
+  term_bright_bg_red "${term_Text__bright_bg_red_text}"
+  return 0
+}
+term_bright_bg_green() {
+  term_bright_bg_green_msg="$1"
+  _cotowali_tmp_139='49'
+
+  _cotowali_tmp_138='102'
+
+  term_format "${term_bright_bg_green_msg}" "$_cotowali_tmp_138" "$_cotowali_tmp_139"
+  return 0
+}
+term_Text__bright_bg_green() {
+  term_Text__bright_bg_green_text="$1"
+  term_bright_bg_green "${term_Text__bright_bg_green_text}"
+  return 0
+}
+term_bright_bg_yellow() {
+  term_bright_bg_yellow_msg="$1"
+  _cotowali_tmp_141='49'
+
+  _cotowali_tmp_140='103'
+
+  term_format "${term_bright_bg_yellow_msg}" "$_cotowali_tmp_140" "$_cotowali_tmp_141"
+  return 0
+}
+term_Text__bright_bg_yellow() {
+  term_Text__bright_bg_yellow_text="$1"
+  term_bright_bg_yellow "${term_Text__bright_bg_yellow_text}"
+  return 0
+}
+term_bright_bg_blue() {
+  term_bright_bg_blue_msg="$1"
+  _cotowali_tmp_143='49'
+
+  _cotowali_tmp_142='104'
+
+  term_format "${term_bright_bg_blue_msg}" "$_cotowali_tmp_142" "$_cotowali_tmp_143"
+  return 0
+}
+term_Text__bright_bg_blue() {
+  term_Text__bright_bg_blue_text="$1"
+  term_bright_bg_blue "${term_Text__bright_bg_blue_text}"
+  return 0
+}
+term_bright_bg_magenta() {
+  term_bright_bg_magenta_msg="$1"
+  _cotowali_tmp_145='49'
+
+  _cotowali_tmp_144='105'
+
+  term_format "${term_bright_bg_magenta_msg}" "$_cotowali_tmp_144" "$_cotowali_tmp_145"
+  return 0
+}
+term_Text__bright_bg_magenta() {
+  term_Text__bright_bg_magenta_text="$1"
+  term_bright_bg_magenta "${term_Text__bright_bg_magenta_text}"
+  return 0
+}
+term_bright_bg_cyan() {
+  term_bright_bg_cyan_msg="$1"
+  _cotowali_tmp_147='49'
+
+  _cotowali_tmp_146='106'
+
+  term_format "${term_bright_bg_cyan_msg}" "$_cotowali_tmp_146" "$_cotowali_tmp_147"
+  return 0
+}
+term_Text__bright_bg_cyan() {
+  term_Text__bright_bg_cyan_text="$1"
+  term_bright_bg_cyan "${term_Text__bright_bg_cyan_text}"
+  return 0
+}
+term_bright_bg_white() {
+  term_bright_bg_white_msg="$1"
+  _cotowali_tmp_149='49'
+
+  _cotowali_tmp_148='107'
+
+  term_format "${term_bright_bg_white_msg}" "$_cotowali_tmp_148" "$_cotowali_tmp_149"
+  return 0
+}
+term_Text__bright_bg_white() {
+  term_Text__bright_bg_white_text="$1"
+  term_bright_bg_white "${term_Text__bright_bg_white_text}"
+  return 0
+}
 prepare_dir() {
   prepare_dir_path="$1"
   if "$(os_path_is_file "${prepare_dir_path}")"
   then
-    _cotowali_tmp_69="Fatal error: Cannot create ${prepare_dir_path}. File exists"
+    _cotowali_tmp_150="Fatal error: Cannot create ${prepare_dir_path}. File exists"
 
-    eprintln "$_cotowali_tmp_69"
+    eprintln "$_cotowali_tmp_150"
     exit 1
   fi
   if ! { "$(os_path_exists "${prepare_dir_path}")" ; }
@@ -1051,65 +1652,75 @@ prepare_dir() {
     mkdir "${prepare_dir_path}"
   fi
 }
-_cotowali_tmp_70='.konryu'
+_cotowali_tmp_151='.konryu'
 
-konryu_path="$(os_path_join "$(os_path_home)" "$_cotowali_tmp_70")"
+konryu_path="$(os_path_join "$(os_path_home)" "$_cotowali_tmp_151")"
 prepare_dir "${konryu_path}"
-_cotowali_tmp_71='.cache'
+_cotowali_tmp_152='.cache'
 
-konryu_cache="$(os_path_join "${konryu_path}" "$_cotowali_tmp_71")"
+konryu_cache="$(os_path_join "${konryu_path}" "$_cotowali_tmp_152")"
 prepare_dir "${konryu_cache}"
-_cotowali_tmp_72='versions'
+_cotowali_tmp_153='bin'
 
-versions_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_72")"
+konryu_bin_dir="$(os_path_join "${konryu_path}" "$_cotowali_tmp_153")"
+prepare_dir "${konryu_bin_dir}"
+_cotowali_tmp_154='konryu'
+
+konryu_sh="$(os_path_join "${konryu_bin_dir}" "$_cotowali_tmp_154")"
+_cotowali_tmp_155='https://raw.githubusercontent.com/cotowali/konryu/dist/konryu.sh'
+
+konryu_sh_url="$_cotowali_tmp_155"
+_cotowali_tmp_156='versions'
+
+versions_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_156")"
 version_path() {
   version_path_version="$1"
   os_path_join "${versions_path}" "${version_path_version}"
   return 0
 }
-_cotowali_tmp_73='current'
+_cotowali_tmp_157='current'
 
-current_version_file_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_73")"
-_cotowali_tmp_74='cotowali'
+current_version_file_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_157")"
+_cotowali_tmp_158='cotowali'
 
-cotowali_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_74")"
+cotowali_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_158")"
 json_field() {
   json_field_key="$1"
-  _cotowali_tmp_77="^${json_field_key}:"
+  _cotowali_tmp_161="^${json_field_key}:"
 
-  _cotowali_tmp_76='[", ]'
+  _cotowali_tmp_160='[", ]'
 
-  _cotowali_tmp_75="\"${json_field_key}\""
+  _cotowali_tmp_159="\"${json_field_key}\""
 
-  filter "$_cotowali_tmp_75" | replace "$_cotowali_tmp_76" '' | replace "$_cotowali_tmp_77" ''
+  filter "$_cotowali_tmp_159" | replace "$_cotowali_tmp_160" '' | replace "$_cotowali_tmp_161" ''
   return 0
 }
 get_releases() {
-  _cotowali_tmp_79='tag_name'
+  _cotowali_tmp_163='tag_name'
 
-  _cotowali_tmp_78='https://api.github.com/repos/cotowali/cotowali/releases'
+  _cotowali_tmp_162='https://api.github.com/repos/cotowali/cotowali/releases'
 
-  http_get "$_cotowali_tmp_78" | json_field "$_cotowali_tmp_79"
+  http_get "$_cotowali_tmp_162" | json_field "$_cotowali_tmp_163"
   return 0
 }
 print_releases() {
-  for _cotowali_tmp_80 in $(get_releases)
+  for _cotowali_tmp_164 in $(get_releases)
   do
-    print_releases_for_2_release="$(eval echo $_cotowali_tmp_80)"
+    print_releases_for_2_release="$(eval echo $_cotowali_tmp_164)"
     println "${print_releases_for_2_release}"
   done
 }
 specified_too_many_versions() {
-  _cotowali_tmp_81='Too many arguments. Specify just one version'
+  _cotowali_tmp_165='Too many arguments. Specify just one version'
 
-  eprintln "$_cotowali_tmp_81"
+  eprintln "$_cotowali_tmp_165"
   exit 1
 }
 is_installed_version() {
   is_installed_version_target_version="$1"
-  for _cotowali_tmp_82 in $(get_installed_versions)
+  for _cotowali_tmp_166 in $(get_installed_versions)
   do
-    is_installed_version_for_3_version="$(eval echo $_cotowali_tmp_82)"
+    is_installed_version_for_3_version="$(eval echo $_cotowali_tmp_166)"
     if [ "${is_installed_version_for_3_version}"  =  "${is_installed_version_target_version}" ]
     then
       echo 'true'
@@ -1125,7 +1736,7 @@ current_version() {
     echo ''
     return 0
   fi
-  cat "${current_version_file_path}" | first5160928157541451375
+  cat "${current_version_file_path}" | first661159289664615648
   return 0
 }
 switch_version() {
@@ -1134,70 +1745,231 @@ switch_version() {
   then
     rm_r "${cotowali_path}"
   fi
-  _cotowali_tmp_83='cotowali'
+  _cotowali_tmp_167='cotowali'
 
-  os_symlink "$(os_path_join "$(version_path "${switch_version_version}")" "$_cotowali_tmp_83")" "${cotowali_path}"
+  os_symlink "$(os_path_join "$(version_path "${switch_version_version}")" "$_cotowali_tmp_167")" "${cotowali_path}"
   echo "${switch_version_version}" > "${current_version_file_path}"
-  _cotowali_tmp_84="switched to cotowali ${switch_version_version}"
+  _cotowali_tmp_168="switched to cotowali ${switch_version_version}"
 
-  println "$_cotowali_tmp_84"
+  println "$_cotowali_tmp_168"
 }
-confirm_with_yes_default() {
-  confirm_with_yes_default_message="$1"
-  confirm_with_yes_default_ans=''
+install_version() {
+  install_version_version="$1"
+  install_version_releases="$(get_releases)"
+  _cotowali_tmp_169='latest'
+
+  if [ "${install_version_version}"  =  "$_cotowali_tmp_169" ]
+  then
+    install_version_version="$(echo "${install_version_releases}" | first661159289664615648 )"
+  else
+    install_version_else_7_found='false'
+    for _cotowali_tmp_170 in ${install_version_releases}
+    do
+      install_version_else_7_for_7_release="$(eval echo $_cotowali_tmp_170)"
+      if [ "${install_version_else_7_for_7_release}"  =  "${install_version_version}" ]
+      then
+        install_version_else_7_found='true'
+        break
+      fi
+    done
+    if ! { "${install_version_else_7_found}" ; }
+    then
+      _cotowali_tmp_171="Cannot install ${install_version_version}: No such version"
+
+      eprintln "$_cotowali_tmp_171"
+      exit 1
+    fi
+  fi
+  install_version_dir="$(version_path "${install_version_version}")"
+  _cotowali_tmp_172='https://github.com/cotowali/cotowali/releases/download'
+
+  install_version_url_base="$_cotowali_tmp_172"
+  install_version_filename="${cotowali_release_archive_name}"
+  _cotowali_tmp_173="Downloading ${install_version_filename} ..."
+
+  println "$_cotowali_tmp_173"
+  _cotowali_tmp_174="${install_version_url_base}/${install_version_version}/${install_version_filename}"
+
+  http_get "$_cotowali_tmp_174" | tar_gz_extract_on "${install_version_dir}" > /dev/null
+  _cotowali_tmp_175="Successfully installed cotowali ${install_version_version} on ${install_version_dir}"
+
+  println "$_cotowali_tmp_175"
+  if [ "$(current_version)"  =  '' ]
+  then
+    switch_version "${install_version_version}" > /dev/null
+  elif [ "$(current_version)"  !=  "${install_version_version}" ]
+  then
+    _cotowali_tmp_176="Do you want to use ${install_version_version} now?"
+
+    if "$(confirm_default_yes "$_cotowali_tmp_176")"
+    then
+      switch_version "${install_version_version}"
+    fi
+  fi
+}
+confirm_default_yes() {
+  confirm_default_yes_message="$1"
+  confirm_default_yes_ans=''
   while 'true'
   do
-    _cotowali_tmp_85="${confirm_with_yes_default_message} [Y/n]: "
+    _cotowali_tmp_177="${confirm_default_yes_message} [Y/n]: "
 
-    confirm_with_yes_default_ans="$(input_tty "$_cotowali_tmp_85")"
-    _cotowali_tmp_89='N'
+    confirm_default_yes_ans="$(input_tty "$_cotowali_tmp_177")"
+    _cotowali_tmp_182='no'
 
-    _cotowali_tmp_87='yes'
+    _cotowali_tmp_181='N'
 
-    _cotowali_tmp_86='Y'
+    _cotowali_tmp_179='yes'
 
-    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_86" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_87" ] || [ "${confirm_with_yes_default_ans}"  =  '' ]
+    _cotowali_tmp_178='Y'
+
+    if [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_178" ] || [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_179" ] || [ "${confirm_default_yes_ans}"  =  '' ]
     then
-      _cotowali_tmp_88='y'
+      _cotowali_tmp_180='y'
 
-      confirm_with_yes_default_ans="$_cotowali_tmp_88"
-    elif [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_89" ]
+      confirm_default_yes_ans="$_cotowali_tmp_180"
+    elif [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_181" ] || [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_182" ]
     then
-      _cotowali_tmp_90='n'
+      _cotowali_tmp_183='n'
 
-      confirm_with_yes_default_ans="$_cotowali_tmp_90"
+      confirm_default_yes_ans="$_cotowali_tmp_183"
     fi
-    _cotowali_tmp_93='n'
+    _cotowali_tmp_185='n'
 
-    _cotowali_tmp_92='no'
+    _cotowali_tmp_184='y'
 
-    _cotowali_tmp_91='y'
-
-    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_91" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_92" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_93" ]
+    if [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_184" ] || [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_185" ]
     then
       break
     fi
-    _cotowali_tmp_94='yes or no'
+    _cotowali_tmp_186='yes or no'
 
-    eprintln "$_cotowali_tmp_94" > /dev/null
+    eprintln "$_cotowali_tmp_186" > /dev/null
   done
-  _cotowali_tmp_95='y'
+  _cotowali_tmp_187='y'
 
-  echo "$( [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_95" ] && echo 'true' || echo 'false' )"
+  echo "$( [ "${confirm_default_yes_ans}"  =  "$_cotowali_tmp_187" ] && echo 'true' || echo 'false' )"
   return 0
 }
+confirm_default_no() {
+  confirm_default_no_message="$1"
+  confirm_default_no_ans=''
+  while 'true'
+  do
+    _cotowali_tmp_188="${confirm_default_no_message} [y/N]: "
+
+    confirm_default_no_ans="$(input_tty "$_cotowali_tmp_188")"
+    _cotowali_tmp_193='no'
+
+    _cotowali_tmp_192='N'
+
+    _cotowali_tmp_190='yes'
+
+    _cotowali_tmp_189='Y'
+
+    if [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_189" ] || [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_190" ]
+    then
+      _cotowali_tmp_191='y'
+
+      confirm_default_no_ans="$_cotowali_tmp_191"
+    elif [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_192" ] || [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_193" ] || [ "${confirm_default_no_ans}"  =  '' ]
+    then
+      _cotowali_tmp_194='n'
+
+      confirm_default_no_ans="$_cotowali_tmp_194"
+    fi
+    _cotowali_tmp_196='n'
+
+    _cotowali_tmp_195='y'
+
+    if [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_195" ] || [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_196" ]
+    then
+      break
+    fi
+    _cotowali_tmp_197='yes or no'
+
+    eprintln "$_cotowali_tmp_197" > /dev/null
+  done
+  _cotowali_tmp_198='y'
+
+  echo "$( [ "${confirm_default_no_ans}"  =  "$_cotowali_tmp_198" ] && echo 'true' || echo 'false' )"
+  return 0
+}
+download_konryu_sh() {
+  _cotowali_tmp_199="Downloading konryu ..."
+
+  println "$_cotowali_tmp_199"
+  http_get "${konryu_sh_url}" > "${konryu_sh}"
+}
+cmd_install_konryu() {
+  download_konryu_sh
+  _cotowali_tmp_200='Successfully installed konryu'
+
+  println "$_cotowali_tmp_200"
+  println ''
+  _cotowali_tmp_201="Do you want to install cotowali now?"
+
+  if "$(confirm_default_yes "$_cotowali_tmp_201")"
+  then
+    println ''
+    _cotowali_tmp_202='latest'
+
+    install_version "$_cotowali_tmp_202"
+  fi
+  println ''
+  _cotowali_tmp_203="Add \`${konryu_bin_dir}\` to your PATH to use konryu command"
+
+  println "$_cotowali_tmp_203"
+  _cotowali_tmp_204="export PATH=\"${konryu_bin_dir}:\${PATH}\""
+
+  println "$_cotowali_tmp_204"
+}
+cmd_update_konryu() {
+  download_konryu_sh
+  _cotowali_tmp_205='Successfully updated konryu'
+
+  println "$_cotowali_tmp_205"
+}
+cmd_destroy() {
+  _cotowali_tmp_206='WARNING: Konryu and all installed cotowali files will be deleted'
+
+  term_bright_red "$_cotowali_tmp_206"
+  _cotowali_tmp_207='Are you sure ?'
+
+  if "$(confirm_default_no "$_cotowali_tmp_207")"
+  then
+    rm_r "${konryu_path}"
+    _cotowali_tmp_208='Successfully deleted konryu and cotowali'
+
+    println "$_cotowali_tmp_208"
+    println ''
+    _cotowali_tmp_209='Thank you for using cotowali so far.'
+
+    println "$_cotowali_tmp_209"
+    _cotowali_tmp_210='If you want to use cotowali again, visit https://cotowali.org'
+
+    println "$_cotowali_tmp_210"
+    _cotowali_tmp_211="Goodbye. But we hope to see you again."
+
+    println "$_cotowali_tmp_211"
+  else
+    _cotowali_tmp_212='Canceled'
+
+    println "$_cotowali_tmp_212"
+  fi
+}
 cmd_init() {
-  _cotowali_tmp_97='bin'
+  _cotowali_tmp_214='bin'
 
-  _cotowali_tmp_96="$(os_path_join "${cotowali_path}" "$_cotowali_tmp_97"):\${PATH}"
+  _cotowali_tmp_213="$(os_path_join "${cotowali_path}" "$_cotowali_tmp_214"):\${PATH}"
 
-  cmd_init_new_path="$_cotowali_tmp_96"
-  _cotowali_tmp_98='# usage: eval "$(konryu init)"'
+  cmd_init_new_path="$_cotowali_tmp_213"
+  _cotowali_tmp_215='# usage: eval "$(konryu init)"'
 
-  println "$_cotowali_tmp_98"
-  _cotowali_tmp_99="export PATH=\"${cmd_init_new_path}\""
+  println "$_cotowali_tmp_215"
+  _cotowali_tmp_216="export PATH=\"${cmd_init_new_path}\""
 
-  println "$_cotowali_tmp_99"
+  println "$_cotowali_tmp_216"
   exit 0
 }
 cmd_releases() {
@@ -1210,17 +1982,17 @@ cmd_current() {
   then
     println "${cmd_current_version}"
   else
-    _cotowali_tmp_100='cotowali is not enabled'
+    _cotowali_tmp_217='cotowali is not enabled'
 
-    println "$_cotowali_tmp_100"
+    println "$_cotowali_tmp_217"
   fi
   exit 0
 }
 cmd_install() {
   array_copy "cmd_install_args" "$1"
-  _cotowali_tmp_101='latest'
+  _cotowali_tmp_218='latest'
 
-  cmd_install_version="$_cotowali_tmp_101"
+  cmd_install_version="$_cotowali_tmp_218"
   if [ "$(__array__any__len cmd_install_args)" -gt 1 ]
   then
     specified_too_many_versions
@@ -1228,66 +2000,16 @@ cmd_install() {
   then
     cmd_install_version="$(array_get cmd_install_args 0 )"
   fi
-  cmd_install_releases="$(get_releases)"
-  _cotowali_tmp_102='latest'
-
-  if [ "${cmd_install_version}"  =  "$_cotowali_tmp_102" ]
-  then
-    cmd_install_version="$(echo "${cmd_install_releases}" | first5160928157541451375 )"
-  else
-    cmd_install_else_12_found='false'
-    for _cotowali_tmp_103 in ${cmd_install_releases}
-    do
-      cmd_install_else_12_for_12_release="$(eval echo $_cotowali_tmp_103)"
-      if [ "${cmd_install_else_12_for_12_release}"  =  "${cmd_install_version}" ]
-      then
-        cmd_install_else_12_found='true'
-        break
-      fi
-    done
-    if ! { "${cmd_install_else_12_found}" ; }
-    then
-      _cotowali_tmp_104="Cannot install ${cmd_install_version}: No such version"
-
-      eprintln "$_cotowali_tmp_104"
-      exit 1
-    fi
-  fi
-  cmd_install_dir="$(version_path "${cmd_install_version}")"
-  _cotowali_tmp_105='https://github.com/cotowali/cotowali/releases/download'
-
-  cmd_install_url_base="$_cotowali_tmp_105"
-  cmd_install_filename="${cotowali_release_archive_name}"
-  _cotowali_tmp_106="Downloading ${cmd_install_filename} ..."
-
-  println "$_cotowali_tmp_106"
-  _cotowali_tmp_107="${cmd_install_url_base}/${cmd_install_version}/${cmd_install_filename}"
-
-  http_get "$_cotowali_tmp_107" | tar_gz_extract_on "${cmd_install_dir}" > /dev/null
-  _cotowali_tmp_108="Successfully installed cotowali ${cmd_install_version} on ${cmd_install_dir}"
-
-  println "$_cotowali_tmp_108"
-  if [ "$(current_version)"  =  '' ]
-  then
-    switch_version "${cmd_install_version}" > /dev/null
-  elif [ "$(current_version)"  !=  "${cmd_install_version}" ]
-  then
-    _cotowali_tmp_109="Do you want to use ${cmd_install_version} now?"
-
-    if "$(confirm_with_yes_default "$_cotowali_tmp_109")"
-    then
-      switch_version "${cmd_install_version}"
-    fi
-  fi
+  install_version "${cmd_install_version}"
   exit 0
 }
 cmd_uninstall() {
   array_copy "cmd_uninstall_args" "$1"
   if [ "$(__array__any__len cmd_uninstall_args)" -eq 0 ]
   then
-    _cotowali_tmp_110='No version is specified'
+    _cotowali_tmp_219='No version is specified'
 
-    eprintln "$_cotowali_tmp_110"
+    eprintln "$_cotowali_tmp_219"
     exit 1
   elif [ "$(__array__any__len cmd_uninstall_args)" -gt 1 ]
   then
@@ -1296,28 +2018,28 @@ cmd_uninstall() {
   cmd_uninstall_version="$(array_get cmd_uninstall_args 0 )"
   if ! { "$(is_installed_version "${cmd_uninstall_version}")" ; }
   then
-    _cotowali_tmp_111="Cannot uninstall ${cmd_uninstall_version}: No such version"
+    _cotowali_tmp_220="Cannot uninstall ${cmd_uninstall_version}: No such version"
 
-    eprintln "$_cotowali_tmp_111"
+    eprintln "$_cotowali_tmp_220"
     exit 1
   fi
   rm_r "$(version_path "${cmd_uninstall_version}")"
-  _cotowali_tmp_112="Uninstalled cotowali ${cmd_uninstall_version}"
+  _cotowali_tmp_221="Uninstalled cotowali ${cmd_uninstall_version}"
 
-  println "$_cotowali_tmp_112"
+  println "$_cotowali_tmp_221"
 }
 get_installed_versions() {
-  for _cotowali_tmp_113 in $(ls "${versions_path}")
+  for _cotowali_tmp_222 in $(ls "${versions_path}")
   do
-    get_installed_versions_for_20_path="$(eval echo $_cotowali_tmp_113)"
-    echo "${get_installed_versions_for_20_path}"
+    get_installed_versions_for_25_path="$(eval echo $_cotowali_tmp_222)"
+    echo "${get_installed_versions_for_25_path}"
   done
 }
 cmd_versions() {
-  for _cotowali_tmp_114 in $(get_installed_versions)
+  for _cotowali_tmp_223 in $(get_installed_versions)
   do
-    cmd_versions_for_21_path="$(eval echo $_cotowali_tmp_114)"
-    println "${cmd_versions_for_21_path}"
+    cmd_versions_for_26_path="$(eval echo $_cotowali_tmp_223)"
+    println "${cmd_versions_for_26_path}"
   done
   exit 0
 }
@@ -1325,9 +2047,9 @@ cmd_use() {
   array_copy "cmd_use_args" "$1"
   if [ "$(__array__any__len cmd_use_args)" -eq 0 ]
   then
-    _cotowali_tmp_115='No version is specified'
+    _cotowali_tmp_224='No version is specified'
 
-    eprintln "$_cotowali_tmp_115"
+    eprintln "$_cotowali_tmp_224"
     exit 1
   fi
   if [ "$(__array__any__len cmd_use_args)" -gt 1 ]
@@ -1336,25 +2058,25 @@ cmd_use() {
   fi
   cmd_use_target_version="$(array_get cmd_use_args 0 )"
   cmd_use_installed_versions="$(get_installed_versions)"
-  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first5160928157541451375 )"
+  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first661159289664615648 )"
   if [ "${cmd_use_latest_version}"  =  '' ]
   then
-    _cotowali_tmp_116='cotowali is not installed'
+    _cotowali_tmp_225='cotowali is not installed'
 
-    eprintln "$_cotowali_tmp_116"
+    eprintln "$_cotowali_tmp_225"
     exit 1
   fi
-  _cotowali_tmp_117='latest'
+  _cotowali_tmp_226='latest'
 
-  if [ "${cmd_use_target_version}"  =  "$_cotowali_tmp_117" ]
+  if [ "${cmd_use_target_version}"  =  "$_cotowali_tmp_226" ]
   then
     cmd_use_target_version="${cmd_use_latest_version}"
   fi
   if ! { "$(is_installed_version "${cmd_use_target_version}")" ; }
   then
-    _cotowali_tmp_118="Cannot use ${cmd_use_target_version}: No such version"
+    _cotowali_tmp_227="Cannot use ${cmd_use_target_version}: No such version"
 
-    eprintln "$_cotowali_tmp_118"
+    eprintln "$_cotowali_tmp_227"
     exit 1
   fi
   switch_version "${cmd_use_target_version}"
@@ -1365,98 +2087,110 @@ is_error='false'
 self=''
 command=''
 array_init "args" 0 
-for _cotowali_tmp_119 in $(array_elements os_args)
+for _cotowali_tmp_228 in $(array_elements os_args)
 
 do
-  for_27_arg="$(eval echo $_cotowali_tmp_119)"
+  for_32_arg="$(eval echo $_cotowali_tmp_228)"
   if [ "${self}"  =  '' ]
   then
-    self="${for_27_arg}"
+    self="${for_32_arg}"
     continue
   fi
-  _cotowali_tmp_122='-'
+  _cotowali_tmp_231='-'
 
-  _cotowali_tmp_121='--help'
+  _cotowali_tmp_230='--help'
 
-  _cotowali_tmp_120='-h'
+  _cotowali_tmp_229='-h'
 
-  if [ "${for_27_arg}"  =  "$_cotowali_tmp_120" ] || [ "${for_27_arg}"  =  "$_cotowali_tmp_121" ]
+  if [ "${for_32_arg}"  =  "$_cotowali_tmp_229" ] || [ "${for_32_arg}"  =  "$_cotowali_tmp_230" ]
   then
     has_help_flag='true'
-  elif [ "$(echo "${for_27_arg}" | awk -v RS='' -v i=0 '{printf "%s", substr($0, i + 1, 1) }' )"  =  "$_cotowali_tmp_122" ]
+  elif [ "$(echo "${for_32_arg}" | awk -v RS='' -v i=0 '{printf "%s", substr($0, i + 1, 1) }' )"  =  "$_cotowali_tmp_231" ]
   then
-    _cotowali_tmp_123="unknown option \`${for_27_arg}\`"
+    _cotowali_tmp_232="unknown option \`${for_32_arg}\`"
 
-    eprintln "$_cotowali_tmp_123"
+    eprintln "$_cotowali_tmp_232"
     is_error='true'
   elif [ "${command}"  =  '' ]
   then
-    command="${for_27_arg}"
+    command="${for_32_arg}"
   else
-    array_assign "_cotowali_tmp_125" "${for_27_arg}"
-    array_copy _cotowali_tmp_124 args
-    array_push_array _cotowali_tmp_124 _cotowali_tmp_125
-    array_copy "args" _cotowali_tmp_124
+    array_assign "_cotowali_tmp_234" "${for_32_arg}"
+    array_copy _cotowali_tmp_233 args
+    array_push_array _cotowali_tmp_233 _cotowali_tmp_234
+    array_copy "args" _cotowali_tmp_233
   fi
 done
-_cotowali_tmp_126='help'
-
-command_help="$_cotowali_tmp_126"
 if ! { "${is_error}" ; }
 then
-  _cotowali_tmp_134='init'
+  _cotowali_tmp_244='destroy'
 
-  _cotowali_tmp_133='versions'
+  _cotowali_tmp_243='update'
 
-  _cotowali_tmp_132='current'
+  _cotowali_tmp_242='init'
 
-  _cotowali_tmp_131='releases'
+  _cotowali_tmp_241='versions'
 
-  _cotowali_tmp_130='use'
+  _cotowali_tmp_240='current'
 
-  _cotowali_tmp_129='uninstall'
+  _cotowali_tmp_239='releases'
 
-  _cotowali_tmp_128='install'
+  _cotowali_tmp_238='use'
 
-  _cotowali_tmp_127='help'
+  _cotowali_tmp_237='uninstall'
+
+  _cotowali_tmp_236='install'
+
+  _cotowali_tmp_235='help'
 
   if [ "${command}"  =  '' ]
   then
-    cmd_install args
-  elif [ "${command}"  =  "$_cotowali_tmp_127" ]
+    if ! { "$(os_path_exists "${konryu_sh}")" ; }
+    then
+      cmd_install_konryu
+    else
+      has_help_flag='true'
+    fi
+  elif [ "${command}"  =  "$_cotowali_tmp_235" ]
   then
     has_help_flag='true'
-  elif [ "${command}"  =  "$_cotowali_tmp_128" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_236" ]
   then
     cmd_install args
-  elif [ "${command}"  =  "$_cotowali_tmp_129" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_237" ]
   then
     cmd_uninstall args
-  elif [ "${command}"  =  "$_cotowali_tmp_130" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_238" ]
   then
     cmd_use args
-  elif [ "${command}"  =  "$_cotowali_tmp_131" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_239" ]
   then
     cmd_releases
-  elif [ "${command}"  =  "$_cotowali_tmp_132" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_240" ]
   then
     cmd_current
-  elif [ "${command}"  =  "$_cotowali_tmp_133" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_241" ]
   then
     cmd_versions
-  elif [ "${command}"  =  "$_cotowali_tmp_134" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_242" ]
   then
     cmd_init
+  elif [ "${command}"  =  "$_cotowali_tmp_243" ]
+  then
+    cmd_update_konryu
+  elif [ "${command}"  =  "$_cotowali_tmp_244" ]
+  then
+    cmd_destroy
   else
-    _cotowali_tmp_135="unknown command \`${command}\`"
+    _cotowali_tmp_245="unknown command \`${command}\`"
 
-    eprintln "$_cotowali_tmp_135"
+    eprintln "$_cotowali_tmp_245"
     is_error='true'
   fi
 fi
 if "${has_help_flag}" || "${is_error}"
 then
-  _cotowali_tmp_136='Konryu - Cotowali installer and version manager
+  _cotowali_tmp_246='Konryu - Cotowali installer and version manager
 
 Usage: kornyu [options] [command] [version]
 
@@ -1471,15 +2205,18 @@ Commands:
   use       - use specified version
   releases  - List available cotowali releases
   versions  - List installed cotowali versions
+
+  update  - Update konryu
+  destroy - Destroy konryu and all installed files
 '
 
-  if_32_msg="$_cotowali_tmp_136"
+  if_38_msg="$_cotowali_tmp_246"
   if "${is_error}"
   then
-    eprint "${if_32_msg}"
+    eprint "${if_38_msg}"
     exit 1
   else
-    print "${if_32_msg}"
+    print "${if_38_msg}"
     exit 0
   fi
 fi
