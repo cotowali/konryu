@@ -3,6 +3,7 @@ require 'platform'
 require 'os'
 require 'http'
 require 'tar'
+require 'term'
 
 fn prepare_dir(path: string) {
   if os::path::is_file(path) {
@@ -129,6 +130,24 @@ fn confirm_default_yes(message: string): bool {
   return ans == 'y'
 }
 
+fn confirm_default_no(message: string): bool {
+  var ans = ''
+  while true {
+    ans = input_tty("$message [y/N]: ")
+    if ans == 'Y' || ans == 'yes' {
+      ans = 'y'
+    } else if ans == 'N' || ans == 'no' || ans == '' {
+      ans = 'n'
+    }
+    if ans == 'y' || ans == 'n' {
+      break
+    }
+    eprintln('yes or no')
+  }
+  return ans == 'y'
+}
+
+
 fn download_konryu_sh() {
   println("Downloading konryu ...")
   http::get(konryu_sh_url) |> konryu_sh
@@ -151,6 +170,20 @@ fn cmd_install_konryu() {
 fn cmd_update_konryu() {
   download_konryu_sh()
   println('Successfully updated konryu')
+}
+
+fn cmd_destroy() {
+  term::bright_red('WARNING: Konryu and all installed cotowali files will be deleted')
+  if confirm_default_no('Are you sure ?') {
+    rm_r(konryu_path)
+    println('Successfully deleted konryu and cotowali')
+    println('')
+    println('Thank you for using cotowali so far.')
+    println('If you want to use cotowali again, visit https://cotowali.org')
+    println("Goodbye. But we hope to see you again.")
+  } else {
+    println('Canceled')
+  }
 }
 
 fn cmd_init() {
@@ -293,6 +326,8 @@ if !is_error {
     cmd_init()
   } else if command == 'update' {
     cmd_update_konryu()
+  } else if command == 'destroy' {
+    cmd_destroy()
   } else {
     eprintln("unknown command `$command`")
     is_error = true
@@ -315,7 +350,8 @@ Commands:
   releases  - List available cotowali releases
   versions  - List installed cotowali versions
 
-  update - Update konryu
+  update  - Update konryu
+  destroy - Destroy konryu and all installed files
 '
   if is_error {
     eprint(msg)
