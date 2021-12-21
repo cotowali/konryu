@@ -241,8 +241,8 @@ var command_help = 'help'
 
 if !is_error {
   if command == '' {
-    command = 'install'
-  } else if command == command_help {
+    cmd_install(args)
+  } else if command == 'help' {
     has_help_flag = true
   } else if command == 'install' {
     cmd_install(args)
