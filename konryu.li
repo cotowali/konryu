@@ -74,6 +74,23 @@ fn switch_version(version: string) {
   println("switched to cotowali $version")
 }
 
+fn confirm_with_yes_default(message: string): bool {
+  var ans = ''
+  while true {
+    ans = input_tty("$message [Y/n]: ")
+    if ans == 'Y' || ans == 'yes' || ans == '' {
+      ans = 'y'
+    } else if ans == 'N' {
+      ans = 'n'
+    }
+    if ans == 'y' || ans == 'no' || ans == 'n' {
+      break
+    }
+    eprintln('yes or no')
+  }
+  return ans == 'y'
+}
+
 fn cmd_releases() {
   print_releases()
   exit(0)
@@ -120,6 +137,14 @@ fn cmd_install(args: []string) {
   println("Downloading ${filename} ...")
   http::get("${url_base}/${version}/${filename}") |> tar::gz::extract_on(dir)
   println("Successfully installed cotowali ${version} on ${dir}")
+
+  if current_version() == '' {
+    switch_version(version) |> null
+  } else if current_version() != version {
+    if confirm_with_yes_default("Do you want to use $version now?") {
+      switch_version(version)
+    }
+  }
 
   exit(0)
 }
