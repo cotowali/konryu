@@ -91,6 +91,13 @@ fn confirm_with_yes_default(message: string): bool {
   return ans == 'y'
 }
 
+fn cmd_init() {
+  const new_path = "${os::path::join(cotowali_path, 'bin')}:\${PATH}"
+  println('# usage: eval "$(konryu init)"')
+  println("export PATH=\"$new_path\"")
+  exit(0)
+}
+
 fn cmd_releases() {
   print_releases()
   exit(0)
@@ -249,12 +256,13 @@ if !is_error {
     cmd_current()
   } else if command == 'versions' {
     cmd_versions()
+  } else if command == 'init' {
+    cmd_init()
   } else {
     eprintln("unknown command `$command`")
     is_error = true
   }
 }
-
 if has_help_flag || is_error {
   var msg = 'Konryu - Cotowali installer and version manager
 
@@ -265,6 +273,7 @@ Options:
 
 Commands:
   help      - Print help message
+  init      - Print shell code to configure environment
   install   - Install cotowali release
   uninstall - uninstall specified version
   use       - use specified version
