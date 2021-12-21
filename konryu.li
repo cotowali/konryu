@@ -106,22 +106,22 @@ fn install_version(version: string) {
   if current_version() == '' {
     switch_version(version) |> null
   } else if current_version() != version {
-    if confirm_with_yes_default("Do you want to use $version now?") {
+    if confirm_default_yes("Do you want to use $version now?") {
       switch_version(version)
     }
   }
 }
 
-fn confirm_with_yes_default(message: string): bool {
+fn confirm_default_yes(message: string): bool {
   var ans = ''
   while true {
     ans = input_tty("$message [Y/n]: ")
     if ans == 'Y' || ans == 'yes' || ans == '' {
       ans = 'y'
-    } else if ans == 'N' {
+    } else if ans == 'N' || ans == 'no' {
       ans = 'n'
     }
-    if ans == 'y' || ans == 'no' || ans == 'n' {
+    if ans == 'y' || ans == 'n' {
       break
     }
     eprintln('yes or no')
@@ -138,7 +138,7 @@ fn cmd_install_konryu() {
   download_konryu_sh()
   println('Successfully installed konryu')
   println('')
-  if confirm_with_yes_default("Do you want to install cotowali now?") {
+  if confirm_default_yes("Do you want to install cotowali now?") {
     println('')
     install_version('latest')
   }
