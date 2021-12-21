@@ -228,18 +228,18 @@ input_tty() {
   echo "${input_tty_res}"
   return 0
 }
-head5124332187720725466() {
+head15336741435362492519() {
   head_n="$1"
    head -n $head_n 
 }
-first16391136280022780767() {
+first5160928157541451375() {
    head -n 1 
 }
-tail10344789879980115664() {
+tail14836495486010767342() {
   tail_n="$1"
    tail -n $tail_n 
 }
-last7270523292488342172() {
+last18384275908501227363() {
    tail -n 1 
 }
 count() {
@@ -320,7 +320,7 @@ mkdir_p() {
     mkdir -p "$@"
   
 }
-pwd775046991074756466() {
+pwd10469673534832865224() {
    pwd 
 }
 
@@ -337,7 +337,7 @@ rm_r() {
 
 # info: fn touch(files)
 
-which4581728952241211296() {
+which10203798116013556076() {
   which_name="$1"
   which_res=
   
@@ -827,13 +827,13 @@ os_path_abs() {
 
   if [ "${os_path_abs_path}"  =  '' ] || [ "${os_path_abs_path}"  =  "$_cotowali_tmp_51" ]
   then
-    pwd775046991074756466
+    pwd10469673534832865224
     return 0
   fi
   os_path_abs_abs_path="${os_path_abs_path}"
   if ! { "$(os_path_is_abs "${os_path_abs_path}")" ; }
   then
-    os_path_abs_abs_path="$(os_path_join "$(pwd775046991074756466)" "${os_path_abs_path}")"
+    os_path_abs_abs_path="$(os_path_join "$(pwd10469673534832865224)" "${os_path_abs_path}")"
   fi
   if "$(platform_is_busybox)"
   then
@@ -1059,67 +1059,57 @@ _cotowali_tmp_71='.cache'
 
 konryu_cache="$(os_path_join "${konryu_path}" "$_cotowali_tmp_71")"
 prepare_dir "${konryu_cache}"
-_cotowali_tmp_72='bin'
+_cotowali_tmp_72='versions'
 
-konryu_bin_dir="$(os_path_join "${konryu_path}" "$_cotowali_tmp_72")"
-prepare_dir "${konryu_bin_dir}"
-_cotowali_tmp_73='konryu'
-
-konryu_sh="$(os_path_join "${konryu_bin_dir}" "$_cotowali_tmp_73")"
-_cotowali_tmp_74='https://raw.githubusercontent.com/cotowali/konryu/dist/konryu.sh'
-
-konryu_sh_url="$_cotowali_tmp_74"
-_cotowali_tmp_75='versions'
-
-versions_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_75")"
+versions_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_72")"
 version_path() {
   version_path_version="$1"
   os_path_join "${versions_path}" "${version_path_version}"
   return 0
 }
-_cotowali_tmp_76='current'
+_cotowali_tmp_73='current'
 
-current_version_file_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_76")"
-_cotowali_tmp_77='cotowali'
+current_version_file_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_73")"
+_cotowali_tmp_74='cotowali'
 
-cotowali_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_77")"
+cotowali_path="$(os_path_join "${konryu_path}" "$_cotowali_tmp_74")"
 json_field() {
   json_field_key="$1"
-  _cotowali_tmp_80="^${json_field_key}:"
+  _cotowali_tmp_77="^${json_field_key}:"
 
-  _cotowali_tmp_79='[", ]'
+  _cotowali_tmp_76='[", ]'
 
-  _cotowali_tmp_78="\"${json_field_key}\""
+  _cotowali_tmp_75="\"${json_field_key}\""
 
-  filter "$_cotowali_tmp_78" | replace "$_cotowali_tmp_79" '' | replace "$_cotowali_tmp_80" ''
+  filter "$_cotowali_tmp_75" | replace "$_cotowali_tmp_76" '' | replace "$_cotowali_tmp_77" ''
   return 0
 }
 get_releases() {
-  _cotowali_tmp_82='tag_name'
+  _cotowali_tmp_79='tag_name'
 
-  _cotowali_tmp_81='https://api.github.com/repos/cotowali/cotowali/releases'
+  _cotowali_tmp_78='https://api.github.com/repos/cotowali/cotowali/releases'
 
-  http_get "$_cotowali_tmp_81" | json_field "$_cotowali_tmp_82"
+  http_get "$_cotowali_tmp_78" | json_field "$_cotowali_tmp_79"
   return 0
 }
 print_releases() {
-  for _cotowali_tmp_83 in $(get_releases)
+  for _cotowali_tmp_80 in $(get_releases)
   do
-    print_releases_for_2_release="$(eval echo $_cotowali_tmp_83)"
+    print_releases_for_2_release="$(eval echo $_cotowali_tmp_80)"
     println "${print_releases_for_2_release}"
   done
 }
 specified_too_many_versions() {
-  _cotowali_tmp_84='Too many arguments. Specify just one version'
+  _cotowali_tmp_81='Too many arguments. Specify just one version'
 
-  eprintln "$_cotowali_tmp_84"
+  eprintln "$_cotowali_tmp_81"
   exit 1
 }
 is_installed_version() {
   is_installed_version_target_version="$1"
-  for _cotowali_tmp_85 in $(get_installed_versions)
+  for _cotowali_tmp_82 in $(get_installed_versions)
   do
-    is_installed_version_for_3_version="$(eval echo $_cotowali_tmp_85)"
+    is_installed_version_for_3_version="$(eval echo $_cotowali_tmp_82)"
     if [ "${is_installed_version_for_3_version}"  =  "${is_installed_version_target_version}" ]
     then
       echo 'true'
@@ -1135,7 +1125,7 @@ current_version() {
     echo ''
     return 0
   fi
-  cat "${current_version_file_path}" | first16391136280022780767
+  cat "${current_version_file_path}" | first5160928157541451375
   return 0
 }
 switch_version() {
@@ -1144,146 +1134,70 @@ switch_version() {
   then
     rm_r "${cotowali_path}"
   fi
-  _cotowali_tmp_86='cotowali'
+  _cotowali_tmp_83='cotowali'
 
-  os_symlink "$(os_path_join "$(version_path "${switch_version_version}")" "$_cotowali_tmp_86")" "${cotowali_path}"
+  os_symlink "$(os_path_join "$(version_path "${switch_version_version}")" "$_cotowali_tmp_83")" "${cotowali_path}"
   echo "${switch_version_version}" > "${current_version_file_path}"
-  _cotowali_tmp_87="switched to cotowali ${switch_version_version}"
+  _cotowali_tmp_84="switched to cotowali ${switch_version_version}"
 
-  println "$_cotowali_tmp_87"
-}
-install_version() {
-  install_version_version="$1"
-  install_version_releases="$(get_releases)"
-  _cotowali_tmp_88='latest'
-
-  if [ "${install_version_version}"  =  "$_cotowali_tmp_88" ]
-  then
-    install_version_version="$(echo "${install_version_releases}" | first16391136280022780767 )"
-  else
-    install_version_else_7_found='false'
-    for _cotowali_tmp_89 in ${install_version_releases}
-    do
-      install_version_else_7_for_7_release="$(eval echo $_cotowali_tmp_89)"
-      if [ "${install_version_else_7_for_7_release}"  =  "${install_version_version}" ]
-      then
-        install_version_else_7_found='true'
-        break
-      fi
-    done
-    if ! { "${install_version_else_7_found}" ; }
-    then
-      _cotowali_tmp_90="Cannot install ${install_version_version}: No such version"
-
-      eprintln "$_cotowali_tmp_90"
-      exit 1
-    fi
-  fi
-  install_version_dir="$(version_path "${install_version_version}")"
-  _cotowali_tmp_91='https://github.com/cotowali/cotowali/releases/download'
-
-  install_version_url_base="$_cotowali_tmp_91"
-  install_version_filename="${cotowali_release_archive_name}"
-  _cotowali_tmp_92="Downloading ${install_version_filename} ..."
-
-  println "$_cotowali_tmp_92"
-  _cotowali_tmp_93="${install_version_url_base}/${install_version_version}/${install_version_filename}"
-
-  http_get "$_cotowali_tmp_93" | tar_gz_extract_on "${install_version_dir}" > /dev/null
-  _cotowali_tmp_94="Successfully installed cotowali ${install_version_version} on ${install_version_dir}"
-
-  println "$_cotowali_tmp_94"
-  if [ "$(current_version)"  =  '' ]
-  then
-    switch_version "${install_version_version}" > /dev/null
-  elif [ "$(current_version)"  !=  "${install_version_version}" ]
-  then
-    _cotowali_tmp_95="Do you want to use ${install_version_version} now?"
-
-    if "$(confirm_with_yes_default "$_cotowali_tmp_95")"
-    then
-      switch_version "${install_version_version}"
-    fi
-  fi
+  println "$_cotowali_tmp_84"
 }
 confirm_with_yes_default() {
   confirm_with_yes_default_message="$1"
   confirm_with_yes_default_ans=''
   while 'true'
   do
-    _cotowali_tmp_96="${confirm_with_yes_default_message} [Y/n]: "
+    _cotowali_tmp_85="${confirm_with_yes_default_message} [Y/n]: "
 
-    confirm_with_yes_default_ans="$(input_tty "$_cotowali_tmp_96")"
-    _cotowali_tmp_100='N'
+    confirm_with_yes_default_ans="$(input_tty "$_cotowali_tmp_85")"
+    _cotowali_tmp_89='N'
 
-    _cotowali_tmp_98='yes'
+    _cotowali_tmp_87='yes'
 
-    _cotowali_tmp_97='Y'
+    _cotowali_tmp_86='Y'
 
-    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_97" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_98" ] || [ "${confirm_with_yes_default_ans}"  =  '' ]
+    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_86" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_87" ] || [ "${confirm_with_yes_default_ans}"  =  '' ]
     then
-      _cotowali_tmp_99='y'
+      _cotowali_tmp_88='y'
 
-      confirm_with_yes_default_ans="$_cotowali_tmp_99"
-    elif [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_100" ]
+      confirm_with_yes_default_ans="$_cotowali_tmp_88"
+    elif [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_89" ]
     then
-      _cotowali_tmp_101='n'
+      _cotowali_tmp_90='n'
 
-      confirm_with_yes_default_ans="$_cotowali_tmp_101"
+      confirm_with_yes_default_ans="$_cotowali_tmp_90"
     fi
-    _cotowali_tmp_104='n'
+    _cotowali_tmp_93='n'
 
-    _cotowali_tmp_103='no'
+    _cotowali_tmp_92='no'
 
-    _cotowali_tmp_102='y'
+    _cotowali_tmp_91='y'
 
-    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_102" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_103" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_104" ]
+    if [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_91" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_92" ] || [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_93" ]
     then
       break
     fi
-    _cotowali_tmp_105='yes or no'
+    _cotowali_tmp_94='yes or no'
 
-    eprintln "$_cotowali_tmp_105" > /dev/null
+    eprintln "$_cotowali_tmp_94" > /dev/null
   done
-  _cotowali_tmp_106='y'
+  _cotowali_tmp_95='y'
 
-  echo "$( [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_106" ] && echo 'true' || echo 'false' )"
+  echo "$( [ "${confirm_with_yes_default_ans}"  =  "$_cotowali_tmp_95" ] && echo 'true' || echo 'false' )"
   return 0
 }
-cmd_install_konryu() {
-  http_get "${konryu_sh_url}" > "${konryu_sh}"
-  _cotowali_tmp_107='Successfully installed cotowali konryu'
-
-  println "$_cotowali_tmp_107"
-  println ''
-  _cotowali_tmp_108="Do you want to install cotowali now?"
-
-  if "$(confirm_with_yes_default "$_cotowali_tmp_108")"
-  then
-    _cotowali_tmp_109='latest'
-
-    install_version "$_cotowali_tmp_109"
-  fi
-  println ''
-  _cotowali_tmp_110="Add \`${konryu_bin_dir}\` to your PATH to use konryu command"
-
-  println "$_cotowali_tmp_110"
-  _cotowali_tmp_111="export PATH=\"${konryu_bin_dir}:\${PATH}\""
-
-  println "$_cotowali_tmp_111"
-}
 cmd_init() {
-  _cotowali_tmp_113='bin'
+  _cotowali_tmp_97='bin'
 
-  _cotowali_tmp_112="$(os_path_join "${cotowali_path}" "$_cotowali_tmp_113"):\${PATH}"
+  _cotowali_tmp_96="$(os_path_join "${cotowali_path}" "$_cotowali_tmp_97"):\${PATH}"
 
-  cmd_init_new_path="$_cotowali_tmp_112"
-  _cotowali_tmp_114='# usage: eval "$(konryu init)"'
+  cmd_init_new_path="$_cotowali_tmp_96"
+  _cotowali_tmp_98='# usage: eval "$(konryu init)"'
 
-  println "$_cotowali_tmp_114"
-  _cotowali_tmp_115="export PATH=\"${cmd_init_new_path}\""
+  println "$_cotowali_tmp_98"
+  _cotowali_tmp_99="export PATH=\"${cmd_init_new_path}\""
 
-  println "$_cotowali_tmp_115"
+  println "$_cotowali_tmp_99"
   exit 0
 }
 cmd_releases() {
@@ -1296,17 +1210,17 @@ cmd_current() {
   then
     println "${cmd_current_version}"
   else
-    _cotowali_tmp_116='cotowali is not enabled'
+    _cotowali_tmp_100='cotowali is not enabled'
 
-    println "$_cotowali_tmp_116"
+    println "$_cotowali_tmp_100"
   fi
   exit 0
 }
 cmd_install() {
   array_copy "cmd_install_args" "$1"
-  _cotowali_tmp_117='latest'
+  _cotowali_tmp_101='latest'
 
-  cmd_install_version="$_cotowali_tmp_117"
+  cmd_install_version="$_cotowali_tmp_101"
   if [ "$(__array__any__len cmd_install_args)" -gt 1 ]
   then
     specified_too_many_versions
@@ -1314,16 +1228,66 @@ cmd_install() {
   then
     cmd_install_version="$(array_get cmd_install_args 0 )"
   fi
-  install_version "${cmd_install_version}"
+  cmd_install_releases="$(get_releases)"
+  _cotowali_tmp_102='latest'
+
+  if [ "${cmd_install_version}"  =  "$_cotowali_tmp_102" ]
+  then
+    cmd_install_version="$(echo "${cmd_install_releases}" | first5160928157541451375 )"
+  else
+    cmd_install_else_12_found='false'
+    for _cotowali_tmp_103 in ${cmd_install_releases}
+    do
+      cmd_install_else_12_for_12_release="$(eval echo $_cotowali_tmp_103)"
+      if [ "${cmd_install_else_12_for_12_release}"  =  "${cmd_install_version}" ]
+      then
+        cmd_install_else_12_found='true'
+        break
+      fi
+    done
+    if ! { "${cmd_install_else_12_found}" ; }
+    then
+      _cotowali_tmp_104="Cannot install ${cmd_install_version}: No such version"
+
+      eprintln "$_cotowali_tmp_104"
+      exit 1
+    fi
+  fi
+  cmd_install_dir="$(version_path "${cmd_install_version}")"
+  _cotowali_tmp_105='https://github.com/cotowali/cotowali/releases/download'
+
+  cmd_install_url_base="$_cotowali_tmp_105"
+  cmd_install_filename="${cotowali_release_archive_name}"
+  _cotowali_tmp_106="Downloading ${cmd_install_filename} ..."
+
+  println "$_cotowali_tmp_106"
+  _cotowali_tmp_107="${cmd_install_url_base}/${cmd_install_version}/${cmd_install_filename}"
+
+  http_get "$_cotowali_tmp_107" | tar_gz_extract_on "${cmd_install_dir}" > /dev/null
+  _cotowali_tmp_108="Successfully installed cotowali ${cmd_install_version} on ${cmd_install_dir}"
+
+  println "$_cotowali_tmp_108"
+  if [ "$(current_version)"  =  '' ]
+  then
+    switch_version "${cmd_install_version}" > /dev/null
+  elif [ "$(current_version)"  !=  "${cmd_install_version}" ]
+  then
+    _cotowali_tmp_109="Do you want to use ${cmd_install_version} now?"
+
+    if "$(confirm_with_yes_default "$_cotowali_tmp_109")"
+    then
+      switch_version "${cmd_install_version}"
+    fi
+  fi
   exit 0
 }
 cmd_uninstall() {
   array_copy "cmd_uninstall_args" "$1"
   if [ "$(__array__any__len cmd_uninstall_args)" -eq 0 ]
   then
-    _cotowali_tmp_118='No version is specified'
+    _cotowali_tmp_110='No version is specified'
 
-    eprintln "$_cotowali_tmp_118"
+    eprintln "$_cotowali_tmp_110"
     exit 1
   elif [ "$(__array__any__len cmd_uninstall_args)" -gt 1 ]
   then
@@ -1332,28 +1296,28 @@ cmd_uninstall() {
   cmd_uninstall_version="$(array_get cmd_uninstall_args 0 )"
   if ! { "$(is_installed_version "${cmd_uninstall_version}")" ; }
   then
-    _cotowali_tmp_119="Cannot uninstall ${cmd_uninstall_version}: No such version"
+    _cotowali_tmp_111="Cannot uninstall ${cmd_uninstall_version}: No such version"
 
-    eprintln "$_cotowali_tmp_119"
+    eprintln "$_cotowali_tmp_111"
     exit 1
   fi
   rm_r "$(version_path "${cmd_uninstall_version}")"
-  _cotowali_tmp_120="Uninstalled cotowali ${cmd_uninstall_version}"
+  _cotowali_tmp_112="Uninstalled cotowali ${cmd_uninstall_version}"
 
-  println "$_cotowali_tmp_120"
+  println "$_cotowali_tmp_112"
 }
 get_installed_versions() {
-  for _cotowali_tmp_121 in $(ls "${versions_path}")
+  for _cotowali_tmp_113 in $(ls "${versions_path}")
   do
-    get_installed_versions_for_21_path="$(eval echo $_cotowali_tmp_121)"
-    echo "${get_installed_versions_for_21_path}"
+    get_installed_versions_for_20_path="$(eval echo $_cotowali_tmp_113)"
+    echo "${get_installed_versions_for_20_path}"
   done
 }
 cmd_versions() {
-  for _cotowali_tmp_122 in $(get_installed_versions)
+  for _cotowali_tmp_114 in $(get_installed_versions)
   do
-    cmd_versions_for_22_path="$(eval echo $_cotowali_tmp_122)"
-    println "${cmd_versions_for_22_path}"
+    cmd_versions_for_21_path="$(eval echo $_cotowali_tmp_114)"
+    println "${cmd_versions_for_21_path}"
   done
   exit 0
 }
@@ -1361,9 +1325,9 @@ cmd_use() {
   array_copy "cmd_use_args" "$1"
   if [ "$(__array__any__len cmd_use_args)" -eq 0 ]
   then
-    _cotowali_tmp_123='No version is specified'
+    _cotowali_tmp_115='No version is specified'
 
-    eprintln "$_cotowali_tmp_123"
+    eprintln "$_cotowali_tmp_115"
     exit 1
   fi
   if [ "$(__array__any__len cmd_use_args)" -gt 1 ]
@@ -1372,25 +1336,25 @@ cmd_use() {
   fi
   cmd_use_target_version="$(array_get cmd_use_args 0 )"
   cmd_use_installed_versions="$(get_installed_versions)"
-  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first16391136280022780767 )"
+  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first5160928157541451375 )"
   if [ "${cmd_use_latest_version}"  =  '' ]
   then
-    _cotowali_tmp_124='cotowali is not installed'
+    _cotowali_tmp_116='cotowali is not installed'
 
-    eprintln "$_cotowali_tmp_124"
+    eprintln "$_cotowali_tmp_116"
     exit 1
   fi
-  _cotowali_tmp_125='latest'
+  _cotowali_tmp_117='latest'
 
-  if [ "${cmd_use_target_version}"  =  "$_cotowali_tmp_125" ]
+  if [ "${cmd_use_target_version}"  =  "$_cotowali_tmp_117" ]
   then
     cmd_use_target_version="${cmd_use_latest_version}"
   fi
   if ! { "$(is_installed_version "${cmd_use_target_version}")" ; }
   then
-    _cotowali_tmp_126="Cannot use ${cmd_use_target_version}: No such version"
+    _cotowali_tmp_118="Cannot use ${cmd_use_target_version}: No such version"
 
-    eprintln "$_cotowali_tmp_126"
+    eprintln "$_cotowali_tmp_118"
     exit 1
   fi
   switch_version "${cmd_use_target_version}"
@@ -1401,100 +1365,98 @@ is_error='false'
 self=''
 command=''
 array_init "args" 0 
-for _cotowali_tmp_127 in $(array_elements os_args)
+for _cotowali_tmp_119 in $(array_elements os_args)
 
 do
-  for_28_arg="$(eval echo $_cotowali_tmp_127)"
+  for_27_arg="$(eval echo $_cotowali_tmp_119)"
   if [ "${self}"  =  '' ]
   then
-    self="${for_28_arg}"
+    self="${for_27_arg}"
     continue
   fi
-  _cotowali_tmp_130='-'
+  _cotowali_tmp_122='-'
 
-  _cotowali_tmp_129='--help'
+  _cotowali_tmp_121='--help'
 
-  _cotowali_tmp_128='-h'
+  _cotowali_tmp_120='-h'
 
-  if [ "${for_28_arg}"  =  "$_cotowali_tmp_128" ] || [ "${for_28_arg}"  =  "$_cotowali_tmp_129" ]
+  if [ "${for_27_arg}"  =  "$_cotowali_tmp_120" ] || [ "${for_27_arg}"  =  "$_cotowali_tmp_121" ]
   then
     has_help_flag='true'
-  elif [ "$(echo "${for_28_arg}" | awk -v RS='' -v i=0 '{printf "%s", substr($0, i + 1, 1) }' )"  =  "$_cotowali_tmp_130" ]
+  elif [ "$(echo "${for_27_arg}" | awk -v RS='' -v i=0 '{printf "%s", substr($0, i + 1, 1) }' )"  =  "$_cotowali_tmp_122" ]
   then
-    _cotowali_tmp_131="unknown option \`${for_28_arg}\`"
+    _cotowali_tmp_123="unknown option \`${for_27_arg}\`"
 
-    eprintln "$_cotowali_tmp_131"
+    eprintln "$_cotowali_tmp_123"
     is_error='true'
   elif [ "${command}"  =  '' ]
   then
-    command="${for_28_arg}"
+    command="${for_27_arg}"
   else
-    array_assign "_cotowali_tmp_133" "${for_28_arg}"
-    array_copy _cotowali_tmp_132 args
-    array_push_array _cotowali_tmp_132 _cotowali_tmp_133
-    array_copy "args" _cotowali_tmp_132
+    array_assign "_cotowali_tmp_125" "${for_27_arg}"
+    array_copy _cotowali_tmp_124 args
+    array_push_array _cotowali_tmp_124 _cotowali_tmp_125
+    array_copy "args" _cotowali_tmp_124
   fi
 done
+_cotowali_tmp_126='help'
+
+command_help="$_cotowali_tmp_126"
 if ! { "${is_error}" ; }
 then
-  _cotowali_tmp_141='init'
+  _cotowali_tmp_134='init'
 
-  _cotowali_tmp_140='versions'
+  _cotowali_tmp_133='versions'
 
-  _cotowali_tmp_139='current'
+  _cotowali_tmp_132='current'
 
-  _cotowali_tmp_138='releases'
+  _cotowali_tmp_131='releases'
 
-  _cotowali_tmp_137='use'
+  _cotowali_tmp_130='use'
 
-  _cotowali_tmp_136='uninstall'
+  _cotowali_tmp_129='uninstall'
 
-  _cotowali_tmp_135='install'
+  _cotowali_tmp_128='install'
 
-  _cotowali_tmp_134='help'
+  _cotowali_tmp_127='help'
 
   if [ "${command}"  =  '' ]
   then
-    if ! { "$(os_path_exists "${konryu_sh}")" ; }
-    then
-      cmd_install_konryu
-    else
-      has_help_flag='true'
-    fi
-  elif [ "${command}"  =  "$_cotowali_tmp_134" ]
+    cmd_install args
+  elif [ "${command}"  =  "$_cotowali_tmp_127" ]
   then
     has_help_flag='true'
-  elif [ "${command}"  =  "$_cotowali_tmp_135" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_128" ]
   then
     cmd_install args
-  elif [ "${command}"  =  "$_cotowali_tmp_136" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_129" ]
   then
     cmd_uninstall args
-  elif [ "${command}"  =  "$_cotowali_tmp_137" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_130" ]
   then
     cmd_use args
-  elif [ "${command}"  =  "$_cotowali_tmp_138" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_131" ]
   then
     cmd_releases
-  elif [ "${command}"  =  "$_cotowali_tmp_139" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_132" ]
   then
     cmd_current
-  elif [ "${command}"  =  "$_cotowali_tmp_140" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_133" ]
   then
     cmd_versions
-  elif [ "${command}"  =  "$_cotowali_tmp_141" ]
+  elif [ "${command}"  =  "$_cotowali_tmp_134" ]
   then
     cmd_init
   else
-    _cotowali_tmp_142="unknown command \`${command}\`"
+    _cotowali_tmp_135="unknown command \`${command}\`"
 
-    eprintln "$_cotowali_tmp_142"
+    eprintln "$_cotowali_tmp_135"
     is_error='true'
   fi
 fi
 if "${has_help_flag}" || "${is_error}"
 then
-  _cotowali_tmp_143='Konryu - Cotowali installer and version manager
+  _cotowali_tmp_136='Konryu - Cotowali installer and version manager
 
 Usage: kornyu [options] [command] [version]
 
@@ -1511,13 +1473,13 @@ Commands:
   versions  - List installed cotowali versions
 '
 
-  if_34_msg="$_cotowali_tmp_143"
+  if_32_msg="$_cotowali_tmp_136"
   if "${is_error}"
   then
-    eprint "${if_34_msg}"
+    eprint "${if_32_msg}"
     exit 1
   else
-    print "${if_34_msg}"
+    print "${if_32_msg}"
     exit 0
   fi
 fi
