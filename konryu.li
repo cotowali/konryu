@@ -18,6 +18,10 @@ var konryu_path = os::path::join(os::path::home(), '.konryu')
 prepare_dir(konryu_path)
 var konryu_cache = os::path::join(konryu_path, '.cache')
 prepare_dir(konryu_cache)
+var konryu_bin_dir = os::path::join(konryu_path, 'bin')
+prepare_dir(konryu_bin_dir)
+var konryu_sh = os::path::join(konryu_bin_dir, 'konryu')
+var konryu_sh_url = 'https://raw.githubusercontent.com/cotowali/konryu/dist/konryu.sh'
 
 var versions_path = os::path::join(konryu_path, 'versions')
 fn version_path(version: string): string {
@@ -74,6 +78,40 @@ fn switch_version(version: string) {
   println("switched to cotowali $version")
 }
 
+fn install_version(version: string) {
+  var releases = get_releases()
+  if version == 'latest' {
+    version = releases |> first()
+  } else {
+    var found = false
+    for release in releases {
+      if release == version {
+        found = true
+        break
+      }
+    }
+    if !found {
+      eprintln("Cannot install $version: No such version")
+      exit(1)
+    }
+  }
+  var dir = version_path(version)
+  var url_base = 'https://github.com/cotowali/cotowali/releases/download'
+  var filename = cotowali::release::archive_name
+
+  println("Downloading ${filename} ...")
+  http::get("${url_base}/${version}/${filename}") |> tar::gz::extract_on(dir)
+  println("Successfully installed cotowali ${version} on ${dir}")
+
+  if current_version() == '' {
+    switch_version(version) |> null
+  } else if current_version() != version {
+    if confirm_with_yes_default("Do you want to use $version now?") {
+      switch_version(version)
+    }
+  }
+}
+
 fn confirm_with_yes_default(message: string): bool {
   var ans = ''
   while true {
@@ -89,6 +127,21 @@ fn confirm_with_yes_default(message: string): bool {
     eprintln('yes or no')
   }
   return ans == 'y'
+}
+
+fn cmd_install_konryu() {
+  println("Downloading konryu ...")
+  http::get(konryu_sh_url) |> konryu_sh
+  println('Successfully installed konryu')
+  println('')
+  if confirm_with_yes_default("Do you want to install cotowali now?") {
+    println('')
+    install_version('latest')
+  }
+
+  println('')
+  println("Add `$konryu_bin_dir` to your PATH to use konryu command")
+  println("export PATH=\"$konryu_bin_dir:\${PATH}\"")
 }
 
 fn cmd_init() {
@@ -121,38 +174,7 @@ fn cmd_install(args: []string) {
     version = args[0]
   }
 
-  var releases = get_releases()
-  if version == 'latest' {
-    version = releases |> first()
-  } else {
-    var found = false
-    for release in releases {
-      if release == version {
-        found = true
-        break
-      }
-    }
-    if !found {
-      eprintln("Cannot install $version: No such version")
-      exit(1)
-    }
-  }
-  var dir = version_path(version)
-  var url_base = 'https://github.com/cotowali/cotowali/releases/download'
-  var filename = cotowali::release::archive_name
-
-  println("Downloading ${filename} ...")
-  http::get("${url_base}/${version}/${filename}") |> tar::gz::extract_on(dir)
-  println("Successfully installed cotowali ${version} on ${dir}")
-
-  if current_version() == '' {
-    switch_version(version) |> null
-  } else if current_version() != version {
-    if confirm_with_yes_default("Do you want to use $version now?") {
-      switch_version(version)
-    }
-  }
-
+  install_version(version)
   exit(0)
 }
 
@@ -237,11 +259,13 @@ for arg in os::args {
   }
 }
 
-var command_help = 'help'
-
 if !is_error {
   if command == '' {
-    cmd_install(args)
+    if !os::path::exists(konryu_sh) {
+      cmd_install_konryu()
+    } else {
+      has_help_flag = true
+    }
   } else if command == 'help' {
     has_help_flag = true
   } else if command == 'install' {
