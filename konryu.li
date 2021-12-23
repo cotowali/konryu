@@ -339,7 +339,7 @@ if !is_error {
 if has_help_flag || is_error {
   var msg = 'Konryu - Cotowali installer and version manager
 
-Usage: kornyu [options] [command] [version]
+Usage: konryu [options] [command] [version]
 
 Options:
   -h --help - Print help message
