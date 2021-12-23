@@ -228,18 +228,18 @@ input_tty() {
   echo "${input_tty_res}"
   return 0
 }
-head9072162888911210253() {
+head96e89a298e0a9f469b9ae458d6afae9f() {
   head_n="$1"
    head -n $head_n 
 }
-first4871515249490275123() {
+first8b04d5e3775d298e78455efc5ca404d5() {
    head -n 1 
 }
-tail198411628760189586() {
+tail7aea2552dfe7eb84b9443b6fc9ba6e01() {
   tail_n="$1"
    tail -n $tail_n 
 }
-last17475948869104472657() {
+last98bd1c45684cf587ac2347a92dd7bb51() {
    tail -n 1 
 }
 count() {
@@ -320,7 +320,7 @@ mkdir_p() {
     mkdir -p "$@"
   
 }
-pwd17367209052517048640() {
+pwd9003d1df22eb4d3820015070385194c8() {
    pwd 
 }
 
@@ -337,7 +337,7 @@ rm_r() {
 
 # info: fn touch(files)
 
-which764944743017323489() {
+which8b7af514f25f1f9456dcd10d2337f753() {
   which_name="$1"
   which_res=
   
@@ -827,13 +827,13 @@ os_path_abs() {
 
   if [ "${os_path_abs_path}"  =  '' ] || [ "${os_path_abs_path}"  =  "$_cotowali_tmp_51" ]
   then
-    pwd17367209052517048640
+    pwd9003d1df22eb4d3820015070385194c8
     return 0
   fi
   os_path_abs_abs_path="${os_path_abs_path}"
   if ! { "$(os_path_is_abs "${os_path_abs_path}")" ; }
   then
-    os_path_abs_abs_path="$(os_path_join "$(pwd17367209052517048640)" "${os_path_abs_path}")"
+    os_path_abs_abs_path="$(os_path_join "$(pwd9003d1df22eb4d3820015070385194c8)" "${os_path_abs_path}")"
   fi
   if "$(platform_is_busybox)"
   then
@@ -1736,7 +1736,7 @@ current_version() {
     echo ''
     return 0
   fi
-  cat "${current_version_file_path}" | first4871515249490275123
+  cat "${current_version_file_path}" | first8b04d5e3775d298e78455efc5ca404d5
   return 0
 }
 switch_version() {
@@ -1760,7 +1760,7 @@ install_version() {
 
   if [ "${install_version_version}"  =  "$_cotowali_tmp_169" ]
   then
-    install_version_version="$(echo "${install_version_releases}" | first4871515249490275123 )"
+    install_version_version="$(echo "${install_version_releases}" | first8b04d5e3775d298e78455efc5ca404d5 )"
   else
     install_version_else_7_found='false'
     for _cotowali_tmp_170 in ${install_version_releases}
@@ -2065,7 +2065,7 @@ cmd_use() {
   fi
   cmd_use_target_version="$(array_get cmd_use_args 0 )"
   cmd_use_installed_versions="$(get_installed_versions)"
-  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first4871515249490275123 )"
+  cmd_use_latest_version="$(echo "${cmd_use_installed_versions}" | first8b04d5e3775d298e78455efc5ca404d5 )"
   if [ "${cmd_use_latest_version}"  =  '' ]
   then
     _cotowali_tmp_227='cotowali is not installed'
