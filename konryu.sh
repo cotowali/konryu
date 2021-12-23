@@ -2199,7 +2199,7 @@ if "${has_help_flag}" || "${is_error}"
 then
   _cotowali_tmp_248='Konryu - Cotowali installer and version manager
 
-Usage: kornyu [options] [command] [version]
+Usage: konryu [options] [command] [version]
 
 Options:
   -h --help - Print help message
@@ -2208,8 +2208,8 @@ Commands:
   help      - Print help message
   init      - Print shell code to configure environment
   install   - Install cotowali release
-  uninstall - uninstall specified version
-  use       - use specified version
+  uninstall - Uninstall specified version
+  use       - Use specified version
   releases  - List available cotowali releases
   versions  - List installed cotowali versions
 
