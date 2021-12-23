@@ -348,8 +348,8 @@ Commands:
   help      - Print help message
   init      - Print shell code to configure environment
   install   - Install cotowali release
-  uninstall - uninstall specified version
-  use       - use specified version
+  uninstall - Uninstall specified version
+  use       - Use specified version
   releases  - List available cotowali releases
   versions  - List installed cotowali versions
 
