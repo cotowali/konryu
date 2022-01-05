@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: cotowali/cotowali-dev
+    steps:
+    - uses: actions/checkout@v2
+    - run: lic konryu.li > konryu.sh
+    - run: cat konryu.sh
